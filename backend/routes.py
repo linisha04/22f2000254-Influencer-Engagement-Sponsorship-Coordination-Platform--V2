@@ -11,3 +11,17 @@ api=Blueprint("api",__name__)
 @api.route("/")
 def index():
     return "Hello, World!"
+
+@api.route("/influencerRegister")
+def influencerRegister():
+    return 'InfluencerRegister'
+
+@api.route("/sponsorRegister")
+def sponsorRegister():
+    return 'sponsorRegister'
+
+
+@api.route("/login")
+def login():
+    return 'logged'
+
