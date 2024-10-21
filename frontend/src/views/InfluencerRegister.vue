@@ -86,3 +86,74 @@ import Navbar from '@/components/Navbar.vue'
         </div>
     </div>
 </template>
+<script>
+    export default {
+        data(){
+        return {
+            username:null,
+            password:null,
+            email:null,
+            niche:null
+        }
+    },
+    methods:{
+        validate(){
+
+            let valid=true;
+            if (!this.username || !length(username)<4 ){
+                valid=false;
+                alert("Please enter valid username or length must be greater than 4.");
+            }
+            if (!this.niche){
+                valid=false;
+                alert("Please enter the niche.");
+            }
+            if (!this.username.length<4 ){
+                valid=false;
+                alert("Please enter the correct password length.");
+            }
+            if (!email){
+                valid=false;
+                alert("Please enter the email");
+            }
+            if(!password){
+                valid=false;
+                alert("Please enter the passord and length should be greater than 4")
+            }
+            
+
+            
+            console.log(this.username , this.password , this.role)
+
+            return valid
+
+
+        },
+        influencerRegister(){
+            if(!this.validate()){
+                return;
+            }
+
+            fetch(import.meta.env.VITE_BASEURL+"/influencerRegister"  ,
+                 {method : "POST" , headers:{"Content-Type" : "application/json"},
+                 body: JSON.stringify({username: this.username, password: this.password , email:this.email , niche: this.niche})
+                }).then(resp => {
+                    return [resp.json() , resp.status]
+                }).then(x=>{
+                    if(x[1] == 200){
+                        return x[0]
+                    }else if(x[1] == 404 || x==400){
+                        this.alert("Invalid username or email or password")
+                    }
+                    return {}
+                }).then(
+                    x =>{
+                        store.commit("setuser" , x);
+                    })
+            
+        }
+    }
+       
+    }
+</script>
+<style scoped></style>

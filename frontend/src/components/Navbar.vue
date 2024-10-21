@@ -25,7 +25,7 @@ import { RouterLink } from 'vue-router';
           <a class="nav-link active" aria-current="page" href="/">Home</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/login">Login</a>
+          <a class="nav-link" href="/signin">Login</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="/influencerRegister">Infuencer Register</a>

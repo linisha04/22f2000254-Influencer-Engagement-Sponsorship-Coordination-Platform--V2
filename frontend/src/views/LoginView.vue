@@ -203,7 +203,7 @@ import { RouterLink } from "vue-router";
                 return;
             }
 
-            fetch(import.meta.env.VITE_BASEURL+"/login"  ,
+            fetch(import.meta.env.VITE_BASEURL+"/signin"  ,
                  {method : "POST" , headers:{"Content-Type" : "application/json"},
                  body: JSON.stringify({username: this.username, password: this.password})
                 }).then(resp => {
