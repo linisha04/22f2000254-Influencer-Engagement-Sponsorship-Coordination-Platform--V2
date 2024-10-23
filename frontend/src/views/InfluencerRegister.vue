@@ -1,5 +1,8 @@
 <script setup>
 import Navbar from '@/components/Navbar.vue'
+import router from '@/router';
+import { RouterLink } from 'vue-router';
+import store from '@/store';
 </script>
 
 <template>
@@ -9,7 +12,7 @@ import Navbar from '@/components/Navbar.vue'
         <div class="card mx-auto" style="width: 45rem;">
             <div class="card-body">
                 <h5 class="card-title">Influencer Register</h5>
-                <form>
+                <form @submit.prevent="influencerregister()">
                     <div class="row mb-3">
                         <label for="name" class="col-sm-2 col-form-label"> Name</label>
                         <div class="col-sm-10">
@@ -129,7 +132,7 @@ import Navbar from '@/components/Navbar.vue'
 
 
         },
-        influencerRegister(){
+        influencerregister(){
             if(!this.validate()){
                 return;
             }
@@ -142,13 +145,24 @@ import Navbar from '@/components/Navbar.vue'
                 }).then(x=>{
                     if(x[1] == 200){
                         return x[0]
-                    }else if(x[1] == 404 || x==400){
-                        this.alert("Invalid username or email or password")
+                    }else if(x[1] == 409 ){
+                        this.alert(" username already present")
                     }
                     return {}
                 }).then(
                     x =>{
-                        store.commit("setuser" , x);
+                        if (x["message"].match("Check Username")){
+                            alert("Check Username");
+                        }else if(x["message"].match("Check password")){
+                            alert("Check password");
+                        }else if(x["message"].match("Check email")){
+                            alert("Check email");
+                        }else if(x["message"].match("Check niche")){
+                            alert("Check niche");
+                        }else{
+                            router.push({name:"loginView"})
+                        }
+                        
                     })
             
         }

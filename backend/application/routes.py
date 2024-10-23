@@ -83,7 +83,7 @@ def sponsor_register():
     username=request.json.get("username")
     password=request.json.get("password")
     email=request.json.get("email")
-    industry=request.json.get("niche")
+    industry=request.json.get("industry")
 
     if not username:
         return {"message":"Check Username" }, 400

@@ -28,7 +28,7 @@ def create_app():
 
         if not Role.query.filter_by(name="admin").first():
             role_admin=app.security.datastore.create_role(name="admin")
-            user_admin=app.security.datastore.create_user(contact="admin@gmail.com", username="admin" , password=generate_password_hash("admin"))
+            user_admin=app.security.datastore.create_user(email="admin@gmail.com", username="admin" , password=generate_password_hash("admin"))
             app.security.datastore.add_role_to_user(user_admin,role_admin)
             
        

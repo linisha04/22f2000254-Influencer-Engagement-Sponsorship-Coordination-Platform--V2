@@ -13,22 +13,22 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      name: 'HomeView',
+      name: 'homeView',
       component: HomeView
     },
     {
       path: '/signin' ,
-      name: 'LoginView' ,
+      name: 'loginView' ,
       component: LoginView
     },
     {
       path: '/sponsorRegister' ,
-      name: 'SponsorRegister' ,
+      name: 'sponsorRegister' ,
       component: SponsorRegister
     },
     {
       path: '/influencerRegister' ,
-      name: 'InfluencerRegister' ,
+      name: 'influencerRegister' ,
       component: InfluencerRegister
 
     }

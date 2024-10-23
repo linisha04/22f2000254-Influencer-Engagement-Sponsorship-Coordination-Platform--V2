@@ -23,7 +23,7 @@ class User(db.Model, UserMixin):
     id=db.Column(db.Integer() ,autoincrement=True, primary_key=True , nullable=False)
     username=db.Column(db.String() , nullable=False , unique=True)
     password=db.Column(db.String() , nullable=False)
-    contact=db.Column(db.String() , nullable=False)
+    email=db.Column(db.String() , nullable=False)
     fs_uniquifier = db.Column(db.String(64), unique=True, nullable=False)
     active = db.Column(db.Boolean())
     roles = db.relationship('Role', secondary='RoleVsUser',

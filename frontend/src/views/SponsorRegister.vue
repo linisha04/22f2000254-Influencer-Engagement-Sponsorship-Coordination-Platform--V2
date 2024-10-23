@@ -1,5 +1,9 @@
 <script setup>
 import Navbar from '@/components/Navbar.vue'
+import router from '@/router';
+import { RouterLink } from 'vue-router';
+import store from '@/store';
+
 </script>
 
 <template>
@@ -10,23 +14,23 @@ import Navbar from '@/components/Navbar.vue'
         <div class="card mx-auto" style="width: 45rem;">
             <div class="card-body">
                 <h5 class="card-title">Sponsor Register</h5>
-                <form>
+                <form @submit.prevent="sponsorRegister">
                     <div class="row mb-3">
                         <label for="name" class="col-sm-2 col-form-label">Name</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="name">
+                            <input type="text" class="form-control" id="name" v-model="username">
                         </div>
                     </div>
                     <div class="row mb-3">
                         <label for="email" class="col-sm-2 col-form-label">Email</label>
                         <div class="col-sm-10">
-                            <input type="email" class="form-control" id="email">
+                            <input type="email" class="form-control" id="email" v-model="email"> 
                         </div>
                     </div>
                     <div class="row mb-3">
                         <label for="password" class="col-sm-2 col-form-label">Password</label>
                         <div class="col-sm-10">
-                            <input type="password" class="form-control" id="password">
+                            <input type="password" class="form-control" id="password" v-model="password">
                         </div>
                     </div>
                     <fieldset class="row mb-3">
@@ -34,28 +38,28 @@ import Navbar from '@/components/Navbar.vue'
                         <div class="col-sm-10">
                             <div class="form-check">
                                 <input class="form-check-input" type="radio" name="industry" id="Fashion&Beauty&Lifestyle"
-                                    value="Fashion&Beauty&Lifestyle" checked>
+                                    value="Fashion&Beauty&Lifestyle" v-model="industry">
                                 <label class="form-check-label" for="Fashion&Beauty&Lifestyle">
                                     Fashion & Beauty & Lifestyle
                                 </label>
                             </div>
                             <div class="form-check">
                                 <input class="form-check-input" type="radio" name="industry" id="Health&Wellness"
-                                    value="Health&Wellness">
+                                    value="Health&Wellness" v-model="industry">
                                 <label class="form-check-label" for="Health&Wellness">
                                     Health & Wellness
                                 </label>
                             </div>
                             <div class="form-check ">
                                 <input class="form-check-input" type="radio" name="industry" id="Travel&Adventure"
-                                    value="Travel&Adventure">
+                                    value="Travel&Adventure" v-model="industry">
                                 <label class="form-check-label" for="Travel&Adventure">
                                     Travel & Adventure
                                 </label>
                             </div>
                             <div class="form-check ">
                                 <input class="form-check-input" type="radio" name="industry" id="Tech&Gaming"
-                                    value="Tech&Gaming">
+                                    value="Tech&Gaming" v-model="industry">
                                 <label class="form-check-label" for="Tech&Gaming">
                                     Tech & Gaming
                                 </label>
@@ -63,7 +67,7 @@ import Navbar from '@/components/Navbar.vue'
 
                             <div class="form-check ">
                                 <input class="form-check-input" type="radio" name="industry" id="Food&Cooking&Lifestyle"
-                                    value="Food&Cooking&Lifestyle">
+                                    value="Food&Cooking&Lifestyle" v-model="industry">
                                 <label class="form-check-label" for="Food&Cooking&Lifestyle">
                                     Food & Cooking & Lifestyle
                                 </label>
@@ -71,7 +75,7 @@ import Navbar from '@/components/Navbar.vue'
 
                             <div class="form-check ">
                                 <input class="form-check-input" type="radio" name="industry" id="Education&Learning"
-                                    value="Education&Learning">
+                                    value="Education&Learning" v-model="industry">
                                 <label class="form-check-label" for="Education&Learning">
                                     Education & Learning
                                 </label>
@@ -104,18 +108,19 @@ import Navbar from '@/components/Navbar.vue'
         validate(){
 
             let valid=true;
-            if (!this.username || !length(username)<4 ){
+            if (!this.username ){
                 valid=false;
                 alert("Please enter valid username or length must be greater than 4.");
+               
             }
             if (!this.industry){
                 valid=false;
                 alert("Please enter the industry.");
             }
-            if (!this.username.length<4 ){
-                valid=false;
-                alert("Please enter the correct password length.");
-            }
+            // if (!this.password.length>3 ){
+            //     valid=false;
+            //     alert("Please enter the correct password length.");
+            // }
             if (!email){
                 valid=false;
                 alert("Please enter the email");
@@ -127,7 +132,7 @@ import Navbar from '@/components/Navbar.vue'
             
 
             
-            console.log(this.username , this.password , this.role)
+            console.log(this.username , this.password , this.email , this.industry)
 
             return valid
 
@@ -146,13 +151,25 @@ import Navbar from '@/components/Navbar.vue'
                 }).then(x=>{
                     if(x[1] == 200){
                         return x[0]
-                    }else if(x[1] == 404 || x==400){
-                        this.alert("Invalid username or email or password")
+                    }else if(x[1] == 409){
+                        this.alert(" username exists")
                     }
+                    console.log(this.username , this.password )
                     return {}
                 }).then(
                     x =>{
-                        store.commit("setuser" , x);
+                        console.log(this.username , this.password , this.email , this.industry)
+                        if (x["message"].match("Check Username")){
+                            alert("Check Username");
+                        }else if(x["message"].match("Check password")){
+                            alert("Check password");
+                        }else if(x["message"].match("Check email")){
+                            alert("Check email");
+                        }else if(x["message"].match("Check industry")){
+                            alert("Check industry");
+                        }else{
+                            router.push({name:"loginView"})
+                        }
                     })
             
         }
