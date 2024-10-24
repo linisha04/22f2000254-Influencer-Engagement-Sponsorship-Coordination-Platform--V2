@@ -83,7 +83,7 @@ import store from '@/store';
                         </div>
                     </fieldset>
 
-                    <button type="submit" class="btn btn-primary"> Register </button>
+                    <button type="submit" class="btn btn-primary"> Sponsor Register </button>
                 </form>
 
 
@@ -159,13 +159,13 @@ import store from '@/store';
                 }).then(
                     x =>{
                         console.log(this.username , this.password , this.email , this.industry)
-                        if (x["message"].match("Check Username")){
+                        if (x["message"]=="Check Username"){
                             alert("Check Username");
-                        }else if(x["message"].match("Check password")){
+                        }else if(x["message"]=="Check password"){
                             alert("Check password");
-                        }else if(x["message"].match("Check email")){
+                        }else if(x["message"]=="Check email"){
                             alert("Check email");
-                        }else if(x["message"].match("Check industry")){
+                        }else if(x["message"]=="Check industry"){
                             alert("Check industry");
                         }else{
                             router.push({name:"loginView"})

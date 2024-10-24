@@ -4,6 +4,8 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from flask_security import login_user
 from .models import Influencer, Sponsor, User, db,   Role
 from flask_login import current_user ,login_user, logout_user, login_required
+from flask_cors import cross_origin
+
 
 api=Blueprint("api",__name__)
 
@@ -13,44 +15,50 @@ def index():
     return "Hello, World!"
 
 
-@api.route("/signin" , methods=["POST"])
-def login():
-    username=request.json.get("username")
-    password=request.json.get("password")
-    role=request.json.get("role")
+# @api.route("/signin" , methods=["POST"])
+# def login():
+#     username=request.json.get("username")
+#     password=request.json.get("password")
+#     role=request.json.get("role")
 
-    if not username:
-        return {"message":"Check Username" }, 400
-    if not password:
-        return {"message":"Check password" }, 400
-    if not role:
-        return {"message":"Check role" }, 400
+    # if not username:
+    #     return {"message":"Check Username" }, 400
+    # if not password:
+    #     return {"message":"Check password" }, 400
+    # if not role:
+    #     return {"message":"Check role" }, 400
 
-    if role=='admin':
-        user=app.security.admin_Datastore.find_user(username=username)
+    # if role=='admin':
+    #     user=app.security.admin_Datastore.find_user(username=username)
         
-    if role=='sponsor':
-        user=app.security.sponsor_Datastore.find_user(company_name=username)
+    # if role=='sponsor':
+    #     user=app.security.sponsor_Datastore.find_user(company_name=username)
 
-    if role=='influencer':
-        user=app.security.sponsor_Datastore.find_user(username=username)
+    # if role=='influencer':
+    #     user=app.security.sponsor_Datastore.find_user(username=username)
 
-    if not user:
-        return {"message": "User not found"} , 404
-    if not check_password_hash(user.password , password):
-        return {"message": "password wrong"} , 404
+    # if not user:
+    #     return {"message": "User not found"} , 404
+    # if not check_password_hash(user.password , password):
+    #     return {"message": "password wrong"} , 404
         
-    login_user(user)  
-    return {"token": user.get_auth_token(),"roles": user.get_roles()}
+    # login_user(user)  
+    # return {"token": user.get_auth_token(),"roles": user.get_roles()}
             
 
 
 @api.route("/influencerRegister" , methods=['POST'])
+@cross_origin(origin='http://localhost:5173')
 def influencer_register():
     username=request.json.get("username")
     password=request.json.get("password")
     email=request.json.get("email")
     niche=request.json.get("niche")
+
+    user=app.security.datastore.find_user(username=username)
+    if user:
+        return {"message" : "User already exists"} ,201
+        
 
     if not username:
         return {"message":"Check Username" }, 400
@@ -66,7 +74,7 @@ def influencer_register():
 
     
     user = app.security.datastore.create_user(username=username , password=generate_password_hash(password) , email=email )
-    user_role=app.security.datastore.find_role(name='infuencer')
+    user_role=app.security.datastore.find_role('infuencer')
     app.security.datastore.add_role_to_user(user , user_role)
 
     influencer = Influencer(id=user.id, niche=niche)
@@ -79,11 +87,17 @@ def influencer_register():
     
 
 @api.route("/sponsorRegister" , methods=['POST'])
+@cross_origin(origin='http://localhost:5173')
 def sponsor_register():
     username=request.json.get("username")
     password=request.json.get("password")
     email=request.json.get("email")
     industry=request.json.get("industry")
+    
+    user=app.security.datastore.find_user(username=username)
+    if user:
+        return {"message" : "User already exists"} ,409
+        
 
     if not username:
         return {"message":"Check Username" }, 400
@@ -94,8 +108,10 @@ def sponsor_register():
     if not industry:
         return {"message":"Check industry" }, 400
 
+    
+
     user = app.security.datastore.create_user(username=username , password=generate_password_hash(password) , email=email )
-    user_role=app.security.datastore.find_role(name='sponsor')
+    user_role=app.security.datastore.find_role('sponsor')
     
     app.security.datastore.add_role_to_user(user , user_role)
     
@@ -103,6 +119,7 @@ def sponsor_register():
     db.session.add(sponsor)
     
     db.session.commit()
+    return {"message": "Request successful , Sponsor created"}, 201
 
     
     

@@ -2,6 +2,8 @@
 import Navbar from "@/components/Navbar.vue";
 import store from "@/store";
 import { RouterLink } from "vue-router";
+import router from '@/router';
+
 </script>
 
 <template>

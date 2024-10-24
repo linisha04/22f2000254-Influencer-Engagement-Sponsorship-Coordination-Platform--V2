@@ -11,7 +11,16 @@ export default createStore({
     },
     mutations: {
         setUser(state, value){
+            localStorage.setItem("user", JSON.stringify(value));
             state.user = value;
+        }
+    },
+    getters: {
+        getRoles(userstate){
+            return userstate.user["roles"];
+        },
+        getToken(userstate){
+            return userstate.user["token"];
         }
     }
 });

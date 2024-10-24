@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import store from '@/store'; 
 import HomeView from '../views/Homeview.vue'
 
 import LoginView from '../views/LoginView.vue'
@@ -35,5 +36,23 @@ const router = createRouter({
     
   ]
 })
+
+
+router.beforeEach((to , from , next ) =>{
+  if(!store.getters.getRoles.includes("admin") && to.fullPath.startsWith("/admin")){
+    return router.push("/")
+  }
+  if(!store.getters.getToken && ((to.fullPath.startsWith("/adminDashboard")) ||(to.fullPath.startsWith("/influencerDashboard")) ||(to.fullPath.startsWith("/sponsorDashboard")) )){
+    return router.push("/")
+  }
+  if(!store.getters.getRoles.includes("infuencer") && to.fullPath.startsWith("/influencerDashboard")){
+    return router.push("/")
+  }
+  if(!store.getters.getRoles.includes("sponsor") && to.fullPath.startsWith("/sponsorDashboard")){
+    return router.push("/")
+  }
+  next()
+});
+
 
 export default router

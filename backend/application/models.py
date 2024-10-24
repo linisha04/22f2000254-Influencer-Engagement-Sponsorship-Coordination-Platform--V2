@@ -44,7 +44,7 @@ class Influencer(db.Model ,UserMixin):
     earnings=db.Column(db.Integer() , default=0,nullable=True)
     flagged=db.Column(db.Boolean(), default=False,nullable=True)
     bio=db.Column(db.String(), default='Write Something....')
-    fs_uniquifier= db.Column(db.String(), unique=True, nullable=False)
+   
    
    
     
@@ -59,6 +59,6 @@ class Sponsor(db.Model , UserMixin):
     flagged=db.Column(db.Boolean(), default=False)
     approved=db.Column(db.Boolean , default=False)
     budget=db.Column(db.Integer() , default=0)
-    fs_uniquifier =db.Column(db.String(), unique=True, nullable=False)
+   
     
 

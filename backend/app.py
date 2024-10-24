@@ -14,10 +14,11 @@ def create_app():
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['SECURITY_PASSWORD_SALT'] = 'salty'
 
-    CORS(app)  
+    
    
     db.init_app(app)
-    
+   
+    CORS(app, resources={r"/*": {"origins": "*"}}) 
     datastore = SQLAlchemyUserDatastore(db, User, Role)
 
     

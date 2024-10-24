@@ -3,6 +3,8 @@ import Navbar from '@/components/Navbar.vue'
 import router from '@/router';
 import { RouterLink } from 'vue-router';
 import store from '@/store';
+
+
 </script>
 
 <template>
@@ -16,19 +18,19 @@ import store from '@/store';
                     <div class="row mb-3">
                         <label for="name" class="col-sm-2 col-form-label"> Name</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="name">
+                            <input type="text" class="form-control" id="name" v-model="username">
                         </div>
                     </div>
                     <div class="row mb-3">
                         <label for="email" class="col-sm-2 col-form-label">Email</label>
                         <div class="col-sm-10">
-                            <input type="email" class="form-control" id="email">
+                            <input type="email" class="form-control" id="email" v-model="email">
                         </div>
                     </div>
                     <div class="row mb-3">
                         <label for="password" class="col-sm-2 col-form-label">Password</label>
                         <div class="col-sm-10">
-                            <input type="password" class="form-control" id="password">
+                            <input type="password" class="form-control" id="password"   v-model="password">
                         </div>
                     </div>
                     <fieldset class="row mb-3">
@@ -36,28 +38,28 @@ import store from '@/store';
                         <div class="col-sm-10">
                             <div class="form-check">
                                 <input class="form-check-input" type="radio" name="niche" id="Fashion&Beauty&Lifestyle"
-                                    value="Fashion&Beauty&Lifestyle" checked>
+                                    value="Fashion&Beauty&Lifestyle"   v-model="niche" >
                                 <label class="form-check-label" for="Fashion&Beauty&Lifestyle">
                                     Fashion & Beauty & Lifestyle
                                 </label>
                             </div>
                             <div class="form-check">
                                 <input class="form-check-input" type="radio" name="niche" id="Health&Wellness"
-                                    value="Health&Wellness">
+                                    value="Health&Wellness"  v-model="niche">
                                 <label class="form-check-label" for="Health&Wellness">
                                     Health & Wellness
                                 </label>
                             </div>
                             <div class="form-check ">
                                 <input class="form-check-input" type="radio" name="niche" id="Travel&Adventure"
-                                    value="Travel&Adventure">
+                                    value="Travel&Adventure"  v-model="niche">
                                 <label class="form-check-label" for="Travel&Adventure">
                                     Travel & Adventure
                                 </label>
                             </div>
                             <div class="form-check ">
                                 <input class="form-check-input" type="radio" name="niche" id="Tech&Gaming"
-                                    value="Tech&Gaming">
+                                    value="Tech&Gaming"  v-model="niche">
                                 <label class="form-check-label" for="Tech&Gaming">
                                     Tech & Gaming
                                 </label>
@@ -65,7 +67,7 @@ import store from '@/store';
 
                             <div class="form-check ">
                                 <input class="form-check-input" type="radio" name="niche" id="Food&Cooking&Lifestyle"
-                                    value="Food&Cooking&Lifestyle">
+                                    value="Food&Cooking&Lifestyle"  v-model="niche">
                                 <label class="form-check-label" for="Food&Cooking&Lifestyle">
                                     Food & Cooking & Lifestyle
                                 </label>
@@ -73,7 +75,7 @@ import store from '@/store';
 
                             <div class="form-check ">
                                 <input class="form-check-input" type="radio" name="niche" id="Education&Learning"
-                                    value="Education&Learning">
+                                    value="Education&Learning"  v-model="niche">
                                 <label class="form-check-label" for="Education&Learning">
                                     Education & Learning
                                 </label>
@@ -81,7 +83,7 @@ import store from '@/store';
                         </div>
                     </fieldset>
 
-                    <button type="submit" class="btn btn-primary"> Register </button>
+                    <button type="submit" class="btn btn-primary"> Influencer Register </button>
                 </form>
 
 
@@ -151,13 +153,13 @@ import store from '@/store';
                     return {}
                 }).then(
                     x =>{
-                        if (x["message"].match("Check Username")){
+                        if (x["message"]=="Check Username"){
                             alert("Check Username");
-                        }else if(x["message"].match("Check password")){
+                        }else if(x["message"]=="Check password"){
                             alert("Check password");
-                        }else if(x["message"].match("Check email")){
+                        }else if(x["message"]=="Check email"){
                             alert("Check email");
-                        }else if(x["message"].match("Check niche")){
+                        }else if(x["message"]=="Check niche"){
                             alert("Check niche");
                         }else{
                             router.push({name:"loginView"})
