@@ -12,15 +12,15 @@ export default createStore({
     mutations: {
         setUser(state, value){
             localStorage.setItem("user", JSON.stringify(value));
-            state.user = value;
+            state.user = value || { token: null, roles: [] };
         }
     },
     getters: {
-        getRoles(userstate){
-            return userstate.user["roles"];
+        getRoles(state){
+            return state.user["roles"] || [];
         },
-        getToken(userstate){
-            return userstate.user["token"];
+        getToken(state){
+            return state.user["token"] || null;
         }
     }
 });

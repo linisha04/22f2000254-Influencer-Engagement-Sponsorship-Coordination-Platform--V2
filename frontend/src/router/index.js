@@ -6,8 +6,9 @@ import LoginView from '../views/LoginView.vue'
 
 import SponsorRegister from '@/views/SponsorRegister.vue'
 
-import InfluencerRegister from '@/views/InfluencerRegister.vue'
-
+import InfluencerRegister from '@/views/InfluencerRegister.vue';
+import SponsorDashboard from '@/views/Sponsor/SponsorDashboard.vue';
+import CreateCampaign from '@/views/Sponsor/CreateCampaign.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -19,7 +20,7 @@ const router = createRouter({
     },
     {
       path: '/signin' ,
-      name: 'loginView' ,
+      name: 'signin' ,
       component: LoginView
     },
     {
@@ -32,6 +33,18 @@ const router = createRouter({
       name: 'influencerRegister' ,
       component: InfluencerRegister
 
+    },
+    {
+      path:'/dashboardSponsor',
+      name:'sponsorDashboard',
+      component:SponsorDashboard,
+      children:[
+        {
+          path: "createCampaign",
+          name: "createCampaign",
+          component:CreateCampaign
+        },
+      ]
     }
     
   ]
@@ -39,17 +52,26 @@ const router = createRouter({
 
 
 router.beforeEach((to , from , next ) =>{
-  if(!store.getters.getRoles.includes("admin") && to.fullPath.startsWith("/admin")){
-    return router.push("/")
+  const roles=store.getters.getRoles;
+  const token=store.getters.getToken;
+  console.log("Roles:", roles);
+  console.log("Token:", token);
+
+
+  if(!roles.includes("admin") && to.fullPath.startsWith("/admin")){
+    return next('/');
   }
-  if(!store.getters.getToken && ((to.fullPath.startsWith("/adminDashboard")) ||(to.fullPath.startsWith("/influencerDashboard")) ||(to.fullPath.startsWith("/sponsorDashboard")) )){
-    return router.push("/")
+  if(!token && ((to.fullPath.startsWith("/adminDashboard")) ||(to.fullPath.startsWith("/influencerDashboard")) ||(to.fullPath.startsWith("/sponsorDashboard")) )){
+    return  next('/');
   }
-  if(!store.getters.getRoles.includes("infuencer") && to.fullPath.startsWith("/influencerDashboard")){
-    return router.push("/")
+  if(!roles.includes("influencer") && to.fullPath.startsWith("/influencerDashboard")){
+    return  next('/');
   }
-  if(!store.getters.getRoles.includes("sponsor") && to.fullPath.startsWith("/sponsorDashboard")){
-    return router.push("/")
+  if(!roles.includes("sponsor") && to.fullPath.startsWith("/sponsorDashboard")){
+    return  next('/');
+  }
+  if(to.fullPath.startsWith("signout")){
+    return  next('/');
   }
   next()
 });

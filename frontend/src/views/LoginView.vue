@@ -27,8 +27,8 @@ import router from '@/router';
                         <input type="password" class="form-control" id="password" v-model="password"  autocomplete="password">
                     </div>
                 </div>
-                <fieldset class="row mb-3">
-                    <legend class="col-form-label col-sm-2 pt-0"   >Role</legend>
+                <!-- <fieldset class="row mb-3">
+                    <legend class="col-form-label col-sm-2 pt-0">Role</legend>
                     <div class="col-sm-10">
                         <div class="form-check">
                             <input class="form-check-input" type="radio" name="role" id="sponsor"  value="sponsor" v-model="role">
@@ -43,7 +43,7 @@ import router from '@/router';
                             <label class="form-check-label" for="admin">   Admin </label>
                         </div>
                     </div>
-                </fieldset>
+                </fieldset> -->
 
                 <button type="submit" class="btn btn-primary"> SignIn </button>
             </form>
@@ -61,19 +61,19 @@ import router from '@/router';
         return {
             username:null,
             password:null,
-            role:null,
+           
         }
     },
     methods:{
         validate(){
 
             let valid=true;
-            if (!this.username || !this.role || !this.password || this.username.length<4 || this.password.length<5){
+            if (!this.username || !this.password ){
                 valid=false;
-                alert("Please enter valid username, password, and select a role.");
+                alert("Please enter valid username, password");
             }
             
-            console.log(this.username , this.password , this.role)
+            console.log(this.username , this.password)
 
             return valid
 
@@ -93,12 +93,21 @@ import router from '@/router';
                     if(x[1] == 200){
                         return x[0]
                     }else if(x[1] == 404 || x==400){
-                        this.alert("Invalid username or role or password")
+                        return alert("Invalid username  or password");
                     }
                     return {}
                 }).then(
                     x =>{
-                        store.commit("setuser" , x);
+                        store.commit("setUser" , x);
+                        if(x["roles"].includes("sponsor")){
+                            router.push({name:"sponsorDashboard"})
+                        }else if(x["roles"].includes("influencer")){
+                         
+                            router.push({name:"influencerDashboard"})
+                        }else{
+                            
+                            router.push({name:"adminDashboard"})
+                        }
                     })
             
         }

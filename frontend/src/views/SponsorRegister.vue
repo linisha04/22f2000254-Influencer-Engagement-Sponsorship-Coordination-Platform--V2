@@ -151,8 +151,8 @@ import store from '@/store';
                 }).then(x=>{
                     if(x[1] == 200){
                         return x[0]
-                    }else if(x[1] == 409){
-                        this.alert(" username exists")
+                    }else if(x[1] == 404 ){
+                        alert(" username exists")
                     }
                     console.log(this.username , this.password )
                     return {}
@@ -168,7 +168,7 @@ import store from '@/store';
                         }else if(x["message"]=="Check industry"){
                             alert("Check industry");
                         }else{
-                            router.push({name:"loginView"})
+                            router.push({name:"signin"})
                         }
                     })
             

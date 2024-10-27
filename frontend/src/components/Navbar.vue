@@ -1,10 +1,3 @@
-<!-- <script>
-import { RouterLink } from 'vue-router';
-
-
-</script> -->
-
-
 <script>
 import { RouterLink } from 'vue-router';
 
@@ -22,16 +15,16 @@ import { RouterLink } from 'vue-router';
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav">
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="/">Home</a>
+          <RouterLink class="nav-link active" aria-current="page" to="/">Home</RouterLink>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/signin">Login</a>
+          <RouterLink class="nav-link" to="/signin">Login</RouterLink>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="/influencerRegister">Infuencer Register</a>
+          <RouterLink class="nav-link" to="/influencerRegister">Infuencer Register</RouterLink>
         </li>
         <li class="nav-item">
-          <a class="nav-link " href="/sponsorRegister">Sponsor Register</a>
+          <RouterLink class="nav-link " to="/sponsorRegister">Sponsor Register</RouterLink>
         </li>
       </ul>
     </div>
@@ -43,4 +36,5 @@ import { RouterLink } from 'vue-router';
 <style>
 
 </style>
+
 
