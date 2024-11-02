@@ -121,11 +121,11 @@ import store from '@/store';
             //     valid=false;
             //     alert("Please enter the correct password length.");
             // }
-            if (!email){
+            if (!this.email){
                 valid=false;
                 alert("Please enter the email");
             }
-            if(!password){
+            if(!this.password){
                 valid=false;
                 alert("Please enter the passord and length should be greater than 4")
             }

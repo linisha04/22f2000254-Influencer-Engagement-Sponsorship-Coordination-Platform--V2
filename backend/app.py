@@ -11,18 +11,15 @@ def create_app():
     app=Flask(__name__)
     app.config['SECRET_KEY']='qwertyui'
     app.config["SQLALCHEMY_DATABASE_URI"]="sqlite:///project_iESCP.db"
-    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-    app.config['SECURITY_PASSWORD_SALT'] = 'salty'
-
     
    
     db.init_app(app)
    
     CORS(app, resources={r"/*": {"origins": "*"}}) 
     datastore = SQLAlchemyUserDatastore(db, User, Role)
-
-    
-    app.security=Security(app,datastore)
+    app.security=Security(app,datastore)  
+   
+   
     with app.app_context():
         db.create_all()
 

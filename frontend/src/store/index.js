@@ -5,22 +5,34 @@ export default createStore({
         return {
             user: {
                 token: null,
-                roles: []
-            }
+                roles: [],
+            
+            
+
+            },
+        
         }
     },
     mutations: {
         setUser(state, value){
             localStorage.setItem("user", JSON.stringify(value));
-            state.user = value || { token: null, roles: [] };
-        }
+            state.user = value ;
+            // || { token: null, roles: [] }
+        },
+       
     },
     getters: {
         getRoles(state){
-            return state.user["roles"] || [];
+            return state.user["roles"];
         },
         getToken(state){
-            return state.user["token"] || null;
-        }
+            return state.user["token"] ;
+        },
+       
+     
+    },
+    actions:{
+       
+
     }
 });

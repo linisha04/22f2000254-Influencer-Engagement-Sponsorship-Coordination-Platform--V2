@@ -98,12 +98,17 @@ import router from '@/router';
                     return {}
                 }).then(
                     x =>{
+
                         store.commit("setUser" , x);
+
+                       
+
+
                         if(x["roles"].includes("sponsor")){
                             router.push({name:"sponsorDashboard"})
                         }else if(x["roles"].includes("influencer")){
-                         
-                            router.push({name:"influencerDashboard"})
+                        
+                            router.push({name:"DashboardInfluencer"})
                         }else{
                             
                             router.push({name:"adminDashboard"})

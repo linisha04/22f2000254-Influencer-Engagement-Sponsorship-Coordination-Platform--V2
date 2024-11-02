@@ -5,7 +5,7 @@ import { RouterLink } from 'vue-router';
 <template>
     <nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top">
         <div class="container-fluid">
-            <a class="navbar-brand" >SponsorDashboard</a>
+            <a class="navbar-brand" >Influencer Dashboard</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                 aria-label="Toggle navigation">
@@ -14,16 +14,13 @@ import { RouterLink } from 'vue-router';
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <RouterLink class="nav-link active" aria-current="page"  to="/sponsorView/dashboardSponsor" >Home</RouterLink>
+                        <RouterLink class="nav-link active" aria-current="page"  to="/dashboardInfluencer" >Home</RouterLink>
                     </li>
                    
                     <li class="nav-item">
-                        <RouterLink class="nav-link active" to="/sponsorView/createCampaign">Create Campaign</RouterLink>
+                        <RouterLink class="nav-link active" to="/campaignsPublic">Create Campaign</RouterLink>
 
                         
-                    </li>
-                    <li class="nav-item">
-                        <RouterLink class="nav-link active" to="/sponsorView/viewCampaign">View Campaign</RouterLink>      
                     </li>
                     <li class="nav-item">
                         <RouterLink class="nav-link active" to="/"> Logout</RouterLink>

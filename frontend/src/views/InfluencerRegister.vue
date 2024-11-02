@@ -105,17 +105,13 @@ import store from '@/store';
         validate(){
 
             let valid=true;
-            if (!this.username || !length(username)<4 ){
+            if (!this.username ){
                 valid=false;
                 alert("Please enter valid username or length must be greater than 4.");
             }
             if (!this.niche){
                 valid=false;
                 alert("Please enter the niche.");
-            }
-            if (!this.username.length<4 ){
-                valid=false;
-                alert("Please enter the correct password length.");
             }
             if (!email){
                 valid=false;
@@ -128,7 +124,7 @@ import store from '@/store';
             
 
             
-            console.log(this.username , this.password , this.role)
+            console.log(this.username , this.password )
 
             return valid
 
@@ -162,7 +158,7 @@ import store from '@/store';
                         }else if(x["message"]=="Check niche"){
                             alert("Check niche");
                         }else{
-                            router.push({name:"loginView"})
+                            router.push({name:"signin"})
                         }
                         
                     })
