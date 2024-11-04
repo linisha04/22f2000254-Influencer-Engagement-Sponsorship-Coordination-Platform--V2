@@ -13,11 +13,13 @@ import SponsorView from '@/views/Sponsor/SponsorView.vue';
 import ViewCampaign from '@/views/Sponsor/ViewCampaign.vue';
 
 
+import InfluencerView from '@/views/Influencer/InfluencerView.vue';
 import DashboardInfluencer from '@/views/Influencer/DashboardInfluencer.vue';
-import CampaignsPublic from '@/views/Influencer/CampaignsPublic.vue';
+import CampaignsPublic from '@/views/Influencer/CampaignsPublic.vue'
 
 
-
+import AdminView from '@/views/admin/AdminView.vue';
+import AdminDashboard from '@/views/admin/AdminDashboard.vue';
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -42,6 +44,7 @@ const router = createRouter({
       component: InfluencerRegister
 
     },
+   
     {
       path:'/sponsorView',
       name:'SponsorView',
@@ -70,17 +73,42 @@ const router = createRouter({
       ]
     },
     {
-      path:'/dashboardInfluencer',
-      name:'DashboardInfluencer',
-      component:DashboardInfluencer,
+      path:'/influencerView',
+      name:'InfluencerView',
+      component:InfluencerView,
+      meta: {  requiresAuth: true,roleRequired: 'influencer' },
       children:[
         {
+          path:"dashboardInfluencer",
+          name:"influencerDashboard",
+          component:DashboardInfluencer,
+          meta: {  requiresAuth: true,roleRequired: 'influencer' },
+
+        },
+        {
           path:"campaignsPublic",
-          name:"campaignsPublic",
-          component:CampaignsPublic
+          name:"CampaignsPublic",
+          component:CampaignsPublic,
+          meta: {  requiresAuth: true,roleRequired: 'influencer' },
       },
 
       ]
+    },
+    {
+      path:'/adminView',
+      name:'AdminView',
+      component:AdminView,
+      meta: {  requiresAuth: true,roleRequired: 'admin' },
+      children:[
+        {
+          path:'adminDashboard',
+          name:'AdminDashboard',
+          component:AdminDashboard,
+          meta: {  requiresAuth: true,roleRequired: 'admin' }
+        },
+        
+      ]
+
     }
     
   ]

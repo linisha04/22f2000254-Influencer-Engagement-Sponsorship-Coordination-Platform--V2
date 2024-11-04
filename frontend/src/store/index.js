@@ -19,6 +19,10 @@ export default createStore({
             state.user = value ;
             // || { token: null, roles: [] }
         },
+        signout(state){
+            state.user=null;
+            state.token=null;
+        }
        
     },
     getters: {
@@ -28,10 +32,14 @@ export default createStore({
         getToken(state){
             return state.user["token"] ;
         },
+
        
      
     },
     actions:{
+        logout({ commit }){
+            commit('signout');
+        }
        
 
     }

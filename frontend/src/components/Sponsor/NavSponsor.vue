@@ -38,7 +38,11 @@ import { RouterLink } from 'vue-router';
     </nav>
 </template>
 
+
 <style scoped>
+
+
+
 
 body {
     padding-top: 56px; 

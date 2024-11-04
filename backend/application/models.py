@@ -23,8 +23,10 @@ class User(db.Model, UserMixin):
     password=db.Column(db.String() , nullable=False)
     email=db.Column(db.String() , nullable=False)
     fs_uniquifier = db.Column(db.String(64), unique=True, nullable=False)
-    active = db.Column(db.Boolean())
+    active = db.Column(db.Boolean(),default=True)
     roles = db.relationship('Role', secondary='RoleVsUser',backref=db.backref('users', lazy='dynamic'))
+    flagged=db.Column(db.Boolean(),default=False)
+   
     
 
     influencer = db.relationship('Influencer', backref='user',uselist=False)
@@ -59,7 +61,6 @@ class Sponsor(db.Model , UserMixin):
     id=db.Column(db.Integer(),db.ForeignKey('User.id') ,autoincrement=True, primary_key=True ,  nullable=False)
     name=db.Column(db.String(), default='Name your company')
     industry=db.Column(db.String())
-    flagged=db.Column(db.Boolean(), default=False)
     approved=db.Column(db.Boolean , default=False)
     budget=db.Column(db.Integer() , default=0)
     campaign=db.relationship('Campaign', backref='sponsor', lazy=True)

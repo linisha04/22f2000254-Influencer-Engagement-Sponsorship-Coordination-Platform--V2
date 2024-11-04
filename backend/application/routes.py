@@ -139,6 +139,7 @@ def userInfo():
         user_info['followers']=curr_sponsor.followers
         user_info['niche']=curr_sponsor.niche
         user_info['bio']=curr_sponsor.bio
+        user_info['earnings']=curr_sponsor.earnings
     return jsonify(user_info)
    
 
@@ -148,7 +149,13 @@ def userInfo():
 @cross_origin(origin='http://localhost:5173')
 @roles_required('sponsor')
 def sponsor_Dashboard():
-    return {"message":"This is dashboard for sponsor"}, 201
+    # curr_user=db.session.query(User).filter_by(username=current_user.username).first()
+    sponsor=db.session.query(Sponsor).filter_by(id=current_user.id).first()
+    if not sponsor:
+        return{"message":"Sponsor Not Exists"} , 404
+    if sponsor.approved==False:
+        return {"message":"Not Approved Yet"}, 403
+    return {"message":"Approved"}, 201
     
 
     
@@ -186,31 +193,23 @@ def createCampaign():
 @api.route("/viewCampaign")
 @cross_origin(origin='http://localhost:5173')
 @auth_required("token")
-@roles_accepted('sponsor', 'influencer')
+@roles_accepted('sponsor')
 def viewCampaign():
     userRoles=[role for role in current_user.get_roles()]
     if 'sponsor' in userRoles:
+        all_campaigns=[]
         id=current_user.id
         campaigns=db.session.query(Campaign).filter_by(sponsor_id=id).all()
-        return campaigns , 201
-    elif 'influencer' in userRoles:
-        campaigns=db.session.query(Campaign).filter_by(visibility="public").all()
-        return campaigns , 201
-    else:
-        result={}
-        campaigns=db.session.query(Campaign).all()
-        number_of_camp=len(campaigns)
-        result['number_of_camp']=number_of_camp
-        public_camp=db.session.query(Campaign).filter_by(visibility="public").all()
-        number_of_public_camp=len(public_camp)
-        result['number_of_public_camp']=number_of_public_camp
-        private_camp=db.session.query(Campaign).filter_by(visibility="private").all()
-        number_of_private_camp=len(private_camp)
-        result['number_of_private_camp']=number_of_private_camp
-        return result , 201
-    
-    return {"message" : "Some Problem may be "} , 404
-        
+        for camp in campaigns:
+            all_campaigns.append({"id":camp.id  , "campaignName":camp.campaignName ,
+                                  "sponsor_id":camp.sponsor_id , "visibility":camp.visibility ,
+                                  "budget":camp.budget ,"niche":camp.niche,
+                                  "goals":camp.goals})
+            
+        return all_campaigns , 200
+    return {"message":"Influencer Dashboard"}, 400
+   
+       
     
 
 
@@ -223,4 +222,52 @@ def dashboardInfluencer():
     return {"message":"Influencer Dashboard"}, 201
 
 
+@api.route("/campaignsPublic",methods=['GET'])
+@cross_origin(origin='http://localhost:5173')
+@auth_required("token")
+@roles_required("influencer")
+def publicCampaigns():
+    userRoles=[role for role in current_user.get_roles()]
+    if 'influencer' in userRoles:
+        campaigns=db.session.query(Campaign).filter_by(visibility="public").all()
+        all_public_campaigns=[]
+        for camp in campaigns:
+            all_public_campaigns.append({"id":camp.id  , "campaignName":camp.campaignName ,
+                                  "sponsor_id":camp.sponsor_id , "visibility":camp.visibility ,
+                                  "budget":camp.budget ,"niche":camp.niche,
+                                  "goals":camp.goals})
+        return all_public_campaigns , 200
+    return {"message":"Influencer Dashboard"}, 400
+        
+    
 
+
+
+@api.route("/adminDashboard")
+@cross_origin(origin='http://localhost:5173')
+@auth_required("token")
+@roles_accepted("admin")
+def adminDashboard():
+    result={}
+    sponsors=db.session.query(Sponsor).filter_by(approved=False).all()
+    sponsors_to_approve=[]
+    for i in sponsors:
+        sponsors_to_approve.append({
+            "id":i.id, "name":i.name , "industry":i.industry , "budget":i.budget , "approved":i.approved
+            })
+        
+    result['sponsors_to_approve']=sponsors_to_approve
+    campaigns=db.session.query(Campaign).all()
+    number_of_camp=len(campaigns)
+    result['number_of_camp']=number_of_camp
+    public_camp=db.session.query(Campaign).filter_by(visibility="public").all()
+    number_of_public_camp=len(public_camp)
+    result['number_of_public_camp']=number_of_public_camp
+    private_camp=db.session.query(Campaign).filter_by(visibility="private").all()
+    number_of_private_camp=len(private_camp)
+    result['number_of_private_camp']=number_of_private_camp
+    return result , 200
+    
+    
+        
+    

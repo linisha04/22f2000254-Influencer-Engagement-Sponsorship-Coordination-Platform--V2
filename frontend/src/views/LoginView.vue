@@ -108,10 +108,10 @@ import router from '@/router';
                             router.push({name:"sponsorDashboard"})
                         }else if(x["roles"].includes("influencer")){
                         
-                            router.push({name:"DashboardInfluencer"})
+                            router.push({name:"influencerDashboard"})
                         }else{
                             
-                            router.push({name:"adminDashboard"})
+                            router.push({name:"AdminDashboard"})
                         }
                     })
             
