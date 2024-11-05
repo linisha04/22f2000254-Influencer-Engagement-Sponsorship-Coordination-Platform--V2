@@ -1,7 +1,6 @@
 <script setup>
 
 import { RouterView } from "vue-router";
-import NavInfluencer from '@/components/Influencer/NavInfluencer.vue';
 import store from '@/store';
 
 </script>
@@ -39,7 +38,8 @@ import store from '@/store';
     <div class="card mx-auto" style="width: 80rem;">
       <div class="card-body">
         <h5 class="card-title">Approve Sponsors</h5>
-        <div v-if="userInfo.sponsors_to_approve && userInfo.sponsors_to_approve.length">
+        <div v-if="userInfo && userInfo.sponsors_to_approve">
+       
           <table class="table  table-striped-columns ">
             <thead>
               <tr class="table-info">
@@ -52,18 +52,19 @@ import store from '@/store';
             </thead>
             <tbody>
               <tr v-for="sponsor in userInfo.sponsors_to_approve" :key="sponsor.id" class="table-success">
-                <!-- <th scope="row">1</th> -->
+                
                 <td>{{ sponsor.id }}</td>
                 <td>{{ sponsor.name }}</td>
                 <td>{{ sponsor.industry }}</td>
                 <td>{{ sponsor.budget }}</td>
                 <td>{{ sponsor.approved }}</td>
+                <td><button  @click="changeApproval(sponsor)">{{ sponsor.approved ? 'Revoke Approval' : 'Grant Approval' }}</button></td>
               </tr>
             </tbody>
           </table>
         </div>
         <div v-else>
-          Loading sponsors or no sponsors to approve...
+          no sponsors to approve...
         </div>
 
 
@@ -78,12 +79,13 @@ import store from '@/store';
 export default {
   data() {
     return {
-      userInfo: null
+      userInfo: null,
+    
     };
   },
 
   methods: {
-    InfluencerInfo() {
+    DashboardInfo() {
       fetch(import.meta.env.VITE_BASEURL + "/adminDashboard", {
         method: "GET",
         headers: {
@@ -97,14 +99,45 @@ export default {
         .then(data => {
           this.userInfo = data;
         })
-        .catch(error => {
-          console.error('Failed to fetch user info:', error)
-        });
-    }
+
+    },
+    
+    changeApproval(sponsor){
+      if (!sponsor) {
+    console.error('Sponsor is undefined');
+    return;
+  }
+      console.log(sponsor)
+     const status=!sponsor.approved;
+     fetch(import.meta.env.VITE_BASEURL+`/approve_status/${sponsor.id}`,
+      {method:'POST',
+        headers:{
+          "Content-Type": "application/json",
+          'Authentication-Token': store.getters.getToken
+        },
+        body:JSON.stringify({
+          approved:status
+          
+        })
+      }).then(
+        x => {
+          console.log(x)
+          return x.json()
+          
+        }).then(x=>{
+         
+          sponsor.approved=status;
+          console.log(x)
+         
+        })
+      }
   },
   mounted() {
-    this.InfluencerInfo();
-  }
+    this.DashboardInfo();
+  },
+  
+  
+  
 
 
 

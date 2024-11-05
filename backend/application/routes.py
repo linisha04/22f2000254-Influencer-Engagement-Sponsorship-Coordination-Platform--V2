@@ -133,6 +133,8 @@ def userInfo():
         user_info['industry']=curr_sponsor.industry
         user_info['name']=curr_sponsor.name
         user_info['budget']=curr_sponsor.budget
+        user_info['approved']=curr_sponsor.approved
+        
     if 'influencer' in userRoles:
         curr_sponsor = db.session.query(Influencer).filter_by(id=user_.id).first()
         user_info['id']=curr_sponsor.id
@@ -212,7 +214,17 @@ def viewCampaign():
        
     
 
-
+@api.route('/deleteCampaign/<int:id>',methods=['DELETE'])
+@cross_origin(origin='http://localhost:5173')
+@auth_required("token")
+@roles_accepted("sponsor")
+def deleteCampagin(id):
+    campaign=db.session.query(Campaign).filter_by(id=id).first()
+    if not campaign:
+        return {"message":"campaign not found"} , 404
+    db.session.delete(campaign)
+    db.session.commit()
+    return {"message":"deleted"} ,200
 
 @api.route("/dashboardInfluencer")
 @cross_origin(origin='http://localhost:5173')
@@ -270,4 +282,67 @@ def adminDashboard():
     
     
         
+@api.route("/approve_status/<int:sponsor_id>" , methods=[ 'POST'])
+@cross_origin(origin='http://localhost:5173')
+@auth_required("token")
+@roles_accepted("admin")
+def change_status(sponsor_id):
+    new_status=request.json.get("approved")
+    sponsor=db.session.query(Sponsor).filter_by(id=sponsor_id).first()
+    if sponsor:
+        sponsor.approved=new_status
+        db.session.commit()
+        return {"message":"change happened", "approved now is":new_status} , 201
+    return {"message":"Sponsor not found"} , 404
     
+    
+@api.route("/getInfluencers")
+@cross_origin(origin='http://localhost:5173')
+@auth_required("token")
+@roles_accepted('sponsor' or 'admin')
+def getInfluencers():
+    all_influencers=[]
+    influencers=db.session.query(Influencer).all()
+    for i in influencers:
+        curr_user=db.session.query(User).filter_by(id=i.id).first()
+        
+        all_influencers.append({
+
+            "id":i.id,
+            "followers":i.followers,
+            "niche":i.niche,
+            "earnings":i.earnings,
+            "bio":i.bio,
+            "username":curr_user.username
+            })
+    return     all_influencers , 200
+    
+    
+@api.route("/createAdrequest" , methods=['POST'])
+@cross_origin(origin='http://localhost:5173')
+@auth_required("token")
+@roles_accepted('sponsor' or 'influencer')
+def createAdrequest():
+    role=[role for role in current_user.get_roles()]
+    if 'sponsor' in role:   
+        ad_name=request.json.get('name')
+        amount=request.json.get('amount')
+        requirements=request.json.get('requirements')
+        influencer_id=request.json.get('influencer_id')
+        campaign_id=request.json.get('campaign_id')
+        created_by=current_user.id
+        sent_to=influencer_id
+
+        is_created=db.session.query(AdRequest).filter_by(created_by=created_by ,sent_to=sent_to,campaign_id=campaign_id, name=ad_name ).first()
+        if is_created:
+            return {"message":"Request Already exists. Choose new influencer"} , 404
+        else:
+            adRequest=AdRequest(name=ad_name,amount=amount,requirements=requirements,influencer_id=influencer_id ,
+                            campaign_id=campaign_id , created_by=created_by,sent_to=sent_to)
+            db.session.add(adRequest)
+            db.session.commit()
+            return {"message":"Adrequest successfully created"} , 201
+        
+        
+        
+

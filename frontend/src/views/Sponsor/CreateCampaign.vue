@@ -122,7 +122,7 @@ import router from "@/router";
 export default {
     data() {
         return {
-         
+
             campaignName: null,
             budget: null,
             visibility: null,

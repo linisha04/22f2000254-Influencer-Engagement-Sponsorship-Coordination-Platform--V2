@@ -9,7 +9,6 @@ import store from '@/store';
 </script>
 <template>
    
-   <NavSponsor/>
 <RouterView/>
 
 </template>

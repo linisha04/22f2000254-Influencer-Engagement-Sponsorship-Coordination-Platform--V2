@@ -9,84 +9,109 @@ import { RouterView } from "vue-router";
 </script>
 
 <template>
- <div class="container mt-5">
-        <div class="card mx-auto" style="width: 80rem;">
-            <div class="card-body">
-                <h5 class="card-title">Campaigns</h5>
 
-<table class="table table-dark table-striped-columns " >
+
+
+  <table class="table  table-striped-columns fixed-top ">
     <thead>
-    <tr>
-      <th scope="col">id</th>
-      <th scope="col">campaignName</th>
-      <th scope="col">visibility</th>
-      <th scope="col">budget</th>
-      <th scope="col">niche</th>
-      <th scope="col">goals</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr v-for="camp in userCamps" :key="camp.id">
+      <tr>
+        <th scope="col" class="table-light">id</th>
+        <th scope="col" class="table-light">campaignName</th>
+        <th scope="col" class="table-light">visibility</th>
+        <th scope="col" class="table-light">budget</th>
+        <th scope="col" class="table-light">niche</th>
+        <th scope="col" class="table-light">goals</th>
+        <th scope="col" class="table-light">Update</th>
+        <th scope="col" class="table-light">Delete</th>
+        <th scope="col" class="table-light">View Ad Requests</th>
+        <th scope="col" class="table-light">Create Ad Requests</th>
+        <th scope="col" class="table-light"><button>
+            <RouterLink class="nav-link active" aria-current="page" to="/sponsorView/dashboardSponsor">Dashboard</RouterLink>
+          </button></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-for="camp in userCamps" :key="camp.id">
         <!-- <th scope="row">{{ camp.id }}</th> -->
-      <td>{{ camp['id'] }}</td>
-      <td>{{ camp['campaignName'] }}</td>
-      <td>{{ camp['visibility'] }}</td>
-      <td>{{ camp['budget'] }}</td>
-      <td>{{ camp['niche'] }}</td>
-      <td>{{ camp['goals'] }}</td>
-    </tr>
-  </tbody>
-</table>
+        <td class="table-warning">{{ camp['id'] }}</td>
+        <td class="table-warning">{{ camp['campaignName'] }}</td>
+        <td class="table-warning"> {{ camp['visibility'] }}</td>
+        <td class="table-warning">{{ camp['budget'] }}</td>
+        <td class="table-warning">{{ camp['niche'] }}</td>
+        <td class="table-warning">{{ camp['goals'] }}</td>
+        <td class="table-warning"><button @click="updateCampaign(camp.id)">Update</button></td>
+        <td class="table-danger"><button @click="deleteCampaign(camp.id)">Delete</button></td>
+        <td class="table-success"><button @click="deleteCampaign(camp.id)">View Ad Requests</button></td>
+        <td class="table-primary"><button  @click="router.push(`/createAdRequest/campaign_id/${camp.id}`)" >Create Ad Requests</button></td>
+        <!-- <td class="table-warning" @click="updateCampaign(camp.id)">Update</td>
+      <td class="table-danger" @click="deleteCampaign(camp.id)">Delete</td> -->
+
+      </tr>
+    </tbody>
+  </table>
 
 
 
-</div>
-        </div>
-    </div>
-    </template>
-   
-   
+
+
+</template>
+
+
 <script>
 
 export default {
-    data(){
-        return {
-            userCamps:null
-        }
-    },
-    methods:{
-        userCampaigns(){
-            fetch(import.meta.env.VITE_BASEURL+"/viewCampaign",{
-                method:'GET',
-                headers:{
-                    "Content-Type": "application/json",
-                    "Authentication-Token": store.getters.getToken
+  data() {
+    return {
+      userCamps: null
+    }
+  },
+  methods: {
+    userCampaigns() {
+      fetch(import.meta.env.VITE_BASEURL + "/viewCampaign", {
+        method: 'GET',
+        headers: {
+          "Content-Type": "application/json",
+          "Authentication-Token": store.getters.getToken
 
-                },
+        },
 
-            }).then((x=>{
-                return x.json()
-            })) .then(data => {
-                console.log("Fetched campaigns:", data);
-               
+      }).then((x => {
+        return x.json()
+      })).then(data => {
+        console.log("Fetched campaigns:", data);
+
         this.userCamps = data;
-       
+
       })
-        }
     },
-    mounted() {
+    deleteCampaign(id) {
+      fetch(import.meta.env.VITE_BASEURL + `/deleteCampaign/${id}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Authentication-Token": store.getters.getToken
+          }
+        }).then(x => {
+          return router.push({ name: "ViewCampaign" })
+        })
+
+    },
+    // createAdRequest(campaign_id){
+    //   fetch(import.meta.env.VITE_BASEURL)
+
+    // }
+  },
+  mounted() {
 
     this.userCampaigns();
   }
-  
 
-    
+
+
 }
 
 
 
-</script>   
+</script>
 
-<style>
-
-</style>
+<style></style>

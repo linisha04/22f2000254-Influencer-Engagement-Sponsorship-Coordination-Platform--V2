@@ -88,12 +88,12 @@ class AdRequest(db.Model):
     __tablename__ = "AdRequest" 
     id=db.Column(db.Integer() , primary_key=True , autoincrement=True)
     campaign_id=db.Column(db.Integer(), db.ForeignKey('Campaign.id') , nullable=False)
-    name=db.Column(db.String(),nullable=False)
+    name=db.Column(db.String(),nullable=False, unique=True)
     influencer_id = db.Column(db.Integer, db.ForeignKey('Influencer.id'),nullable=True)
     messages=db.Column(db.String(),default='Not Enough Details. Contact Sponsor')
     requirements=db.Column(db.String(),default='Not Enough Details. Contact Sponsor')
     amount=db.Column(db.Integer(),default=0)
-    status=db.Column(db.String(),nullable=True)
+    status=db.Column(db.String(),default="pending")
     created_by=db.Column(db.Integer(), nullable=False)
     sent_to=db.Column(db.Integer(),nullable=False)
     

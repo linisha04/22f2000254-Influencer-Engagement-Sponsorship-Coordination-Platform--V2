@@ -12,16 +12,27 @@ import { onMounted } from 'vue';
 <template>
    
 
-<NavSponsor/>
 
 <RouterView/>
+
+<div v-if="userInfo && userInfo.approved === 0">
+  <br>
+  <br>
+  <br>
+  <h1>wait till admin approves You</h1>
+  <RouterLink class="nav-link active" aria-current="page"  to="/" >Home</RouterLink>
+
+</div>
+
+<div v-else-if="userInfo"> 
+  <NavSponsor/>
 
 
   <div class="card" style="width: 56rem ;">
   <img src="/Users/linisha/Documents/MAD2/frontend/src/assets/Home Page.png" class="card-img-top" alt="Image">
  
    
-  <div v-if="userInfo">
+  
   <ul class="list-group list-group-flush">
 
 
@@ -31,10 +42,15 @@ import { onMounted } from 'vue';
     <li class="list-group-item"><b>Your Industry Name : </b>   {{ userInfo.name }}                  </li>
     <li class="list-group-item"><b>Industry : </b>          {{ userInfo.industry }}                        </li>
     <li class="list-group-item"><b>Your Budget : </b>            {{ userInfo.budget }}                   </li>
+    <li class="list-group-item"><b> approved : </b>            {{ userInfo.approved }}                   </li>
   </ul>
+
 </div>
-<div v-else> Loading... </div>
 </div>
+
+<div v-else> 
+  Loading...
+ </div>
 
 
 
@@ -68,9 +84,12 @@ import { onMounted } from 'vue';
       });
     }
   },
+
   mounted() {
     this.sponsorInfo();
-  }
+  },
+  
+  
   
 
  
