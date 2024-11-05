@@ -32,7 +32,7 @@ import { RouterView } from "vue-router";
     </thead>
     <tbody>
       <tr v-for="camp in userCamps" :key="camp.id">
-        <!-- <th scope="row">{{ camp.id }}</th> -->
+       
         <td class="table-warning">{{ camp['id'] }}</td>
         <td class="table-warning">{{ camp['campaignName'] }}</td>
         <td class="table-warning"> {{ camp['visibility'] }}</td>
@@ -41,10 +41,9 @@ import { RouterView } from "vue-router";
         <td class="table-warning">{{ camp['goals'] }}</td>
         <td class="table-warning"><button @click="updateCampaign(camp.id)">Update</button></td>
         <td class="table-danger"><button @click="deleteCampaign(camp.id)">Delete</button></td>
-        <td class="table-success"><button @click="deleteCampaign(camp.id)">View Ad Requests</button></td>
+        <td class="table-success"><button @click="router.push(`/viewAdRequests/campaign_id/${camp.id}`)">View Ad Requests</button></td>
         <td class="table-primary"><button  @click="router.push(`/createAdRequest/campaign_id/${camp.id}`)" >Create Ad Requests</button></td>
-        <!-- <td class="table-warning" @click="updateCampaign(camp.id)">Update</td>
-      <td class="table-danger" @click="deleteCampaign(camp.id)">Delete</td> -->
+       
 
       </tr>
     </tbody>

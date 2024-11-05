@@ -7,7 +7,7 @@ import SponsorRegister from '@/views/SponsorRegister.vue'
 import InfluencerRegister from '@/views/InfluencerRegister.vue';
 
 import CreateAdRequest from '@/views/createAdRequest.vue';
-
+import ViewAdRequests from '@/views/ViewAdRequests.vue';
 
 import SponsorDashboard from '@/views/Sponsor/SponsorDashboard.vue';
 import CreateCampaign from '@/views/Sponsor/CreateCampaign.vue';
@@ -50,6 +50,13 @@ const router = createRouter({
       path:'/createAdRequest/campaign_id/:id',
       name:'CreateAdRequest',
       component:CreateAdRequest,
+      meta: {  requiresAuth: true},
+      props: true
+    },
+    {
+      path:'/viewAdRequest/campaign_id/:id',
+      name:'ViewAdRequests',
+      component:ViewAdRequests,
       meta: {  requiresAuth: true},
       props: true
     },

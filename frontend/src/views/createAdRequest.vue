@@ -161,6 +161,10 @@ export default {
             if(x.status == 201){
                 router.push({"name":"sponsorDashboard"})
             }
+            if(x.status == 409){
+                alert("Req already exists for this campaign")
+                router.push({"name":"sponsorDashboard"})
+            }
         })
     }
     },
