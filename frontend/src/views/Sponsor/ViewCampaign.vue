@@ -11,7 +11,6 @@ import { RouterView } from "vue-router";
 <template>
 
 
-
   <table class="table  table-striped-columns fixed-top ">
     <thead>
       <tr>

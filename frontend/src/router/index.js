@@ -22,6 +22,7 @@ import CampaignsPublic from '@/views/Influencer/CampaignsPublic.vue'
 
 import AdminView from '@/views/admin/AdminView.vue';
 import AdminDashboard from '@/views/admin/AdminDashboard.vue';
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -54,7 +55,7 @@ const router = createRouter({
       props: true
     },
     {
-      path:'/viewAdRequest/campaign_id/:id',
+      path:'/viewAdRequests/campaign_id/:id',
       name:'ViewAdRequests',
       component:ViewAdRequests,
       meta: {  requiresAuth: true},

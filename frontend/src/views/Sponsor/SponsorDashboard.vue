@@ -28,7 +28,7 @@ import { onMounted } from 'vue';
   <NavSponsor/>
 
 
-  <div class="card" style="width: 56rem ;">
+  <div class="card" style="width:max-content ;">
   <img src="/Users/linisha/Documents/MAD2/frontend/src/assets/Home Page.png" class="card-img-top" alt="Image">
  
    
