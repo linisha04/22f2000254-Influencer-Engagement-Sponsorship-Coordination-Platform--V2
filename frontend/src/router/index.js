@@ -13,6 +13,7 @@ import SponsorDashboard from '@/views/Sponsor/SponsorDashboard.vue';
 import CreateCampaign from '@/views/Sponsor/CreateCampaign.vue';
 import SponsorView from '@/views/Sponsor/SponsorView.vue';
 import ViewCampaign from '@/views/Sponsor/ViewCampaign.vue';
+import UpdateCampaign from '@/views/Sponsor/UpdateCampaign.vue';
 
 
 import InfluencerView from '@/views/Influencer/InfluencerView.vue';
@@ -86,6 +87,15 @@ const router = createRouter({
           name:'ViewCampaign',
           component:ViewCampaign,
           meta: {  requiresAuth: true,roleRequired: 'sponsor' },
+        },
+        {
+          path:"updateCampaign/:id",
+          name:'UpdateCampaign',
+          component:UpdateCampaign,
+          meta: {  requiresAuth: true,roleRequired: 'sponsor' },
+          props:true
+
+
         }
       ]
     },

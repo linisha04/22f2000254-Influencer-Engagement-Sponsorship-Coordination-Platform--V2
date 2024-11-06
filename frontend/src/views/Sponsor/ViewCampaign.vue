@@ -90,7 +90,7 @@ export default {
             "Authentication-Token": store.getters.getToken
           }
         }).then(x => {
-          return router.push({ name: "ViewCampaign" })
+          return router.push({ name: "sponsorDashboard" })
         })
 
     },

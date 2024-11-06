@@ -219,6 +219,9 @@ def viewCampaign():
 @auth_required("token")
 @roles_accepted("sponsor")
 def deleteCampagin(id):
+    connected_adReq=db.session.query(AdRequest).filter_by(campaign_id=id).all()
+    for req in connected_adReq:
+        db.session.delete(req)
     campaign=db.session.query(Campaign).filter_by(id=id).first()
     if not campaign:
         return {"message":"campaign not found"} , 404
@@ -367,6 +370,16 @@ def getAdRequest(id):
     return {"message":" You r not sponsor "} , 404
         
                 
-
-        
+@api.route("/deleteAd/<int:id>",methods=['DELETE'])
+@cross_origin(origin='http://localhost:5173')
+@auth_required("token")
+@roles_accepted('sponsor')
+def deleteAd(id):
+    ad=db.session.query(AdRequest).filter_by(id=id).first()
+    if not ad:
+        return {"message":"No ad found to delete"} , 404
+    db.session.delete(ad)
+    db.session.commit()
+    return {"message":"Ad successfully deleted"} , 200
+    
 
