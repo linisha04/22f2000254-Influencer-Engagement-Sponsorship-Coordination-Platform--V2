@@ -38,7 +38,7 @@ import { RouterView } from "vue-router";
         <td class="table-warning">{{ camp['budget'] }}</td>
         <td class="table-warning">{{ camp['niche'] }}</td>
         <td class="table-warning">{{ camp['goals'] }}</td>
-        <td class="table-warning"><button @click="updateCampaign(camp.id)">Update</button></td>
+        <td class="table-primary"><button  @click="router.push(`/sponsorView/updateCampaign/${camp.id}`)" >update</button></td>
         <td class="table-danger"><button @click="deleteCampaign(camp.id)">Delete</button></td>
         <td class="table-success"><button @click="router.push(`/viewAdRequests/campaign_id/${camp.id}`)">View Ad Requests</button></td>
         <td class="table-primary"><button  @click="router.push(`/createAdRequest/campaign_id/${camp.id}`)" >Create Ad Requests</button></td>
@@ -94,10 +94,7 @@ export default {
         })
 
     },
-    // createAdRequest(campaign_id){
-    //   fetch(import.meta.env.VITE_BASEURL)
-
-    // }
+  
   },
   mounted() {
 

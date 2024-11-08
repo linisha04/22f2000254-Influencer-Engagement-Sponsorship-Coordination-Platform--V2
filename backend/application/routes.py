@@ -324,7 +324,7 @@ def getInfluencers():
 @api.route("/createAdrequest" , methods=['POST'])
 @cross_origin(origin='http://localhost:5173')
 @auth_required("token")
-@roles_accepted('sponsor' or 'influencer')
+@roles_accepted('sponsor', 'influencer')
 def createAdrequest():
     role=[role for role in current_user.get_roles()]
     if 'sponsor' in role:   
@@ -337,6 +337,8 @@ def createAdrequest():
         sent_to=influencer_id
 
         is_created=db.session.query(AdRequest).filter_by(created_by=created_by ,sent_to=sent_to,campaign_id=campaign_id ).first()
+        is_exists=db.session.query(AdRequest).filter_by(created_by=sent_to ,sent_to=created_by,campaign_id=campaign_id ).first()
+
         if is_created:
             return {"message":"Request Already exists. Choose new influencer"} , 409
         else:
@@ -345,6 +347,32 @@ def createAdrequest():
             db.session.add(adRequest)
             db.session.commit()
             return {"message":"Adrequest successfully created"} , 201
+
+        
+    if 'influencer' in role:
+        ad_name=request.json.get('name')
+        amount=request.json.get('amount')
+        influencer_id=current_user.id
+        campaign_id=request.json.get('campaign_id')
+        created_by=current_user.id
+        requirements=request.json.get('requirements')
+        camp=db.session.query(Campaign).filter_by(id=campaign_id).first()
+        sent_to=camp.sponsor_id
+        is_created=db.session.query(AdRequest).filter_by(created_by=created_by ,sent_to=sent_to,campaign_id=campaign_id ).first()
+        is_exists=db.session.query(AdRequest).filter_by(created_by=sent_to ,sent_to=created_by,campaign_id=campaign_id ).first()
+        if is_exists or is_created:
+            return {"message":"Request Already exists. Choose new influencer"} , 409
+        adRequest=AdRequest(name=ad_name,amount=amount,requirements=requirements,influencer_id=influencer_id ,
+                            campaign_id=campaign_id , created_by=created_by,sent_to=sent_to)
+        db.session.add(adRequest)
+        db.session.commit()
+        return {"message":"Adrequest successfully created"} , 201
+        
+        
+
+        
+        
+            
         
      
         
@@ -370,16 +398,67 @@ def getAdRequest(id):
     return {"message":" You r not sponsor "} , 404
         
                 
-@api.route("/deleteAd/<int:id>",methods=['DELETE'])
+@api.route("/get_update_delete_Ad/<int:id>",methods=['DELETE','GET','PUT'])
 @cross_origin(origin='http://localhost:5173')
 @auth_required("token")
 @roles_accepted('sponsor')
-def deleteAd(id):
+def get_update_delete_Ad(id):
+    current_user_id=current_user.id
     ad=db.session.query(AdRequest).filter_by(id=id).first()
     if not ad:
         return {"message":"No ad found to delete"} , 404
-    db.session.delete(ad)
-    db.session.commit()
-    return {"message":"Ad successfully deleted"} , 200
+    if request.method=='DELETE':
+        db.session.delete(ad)
+        db.session.commit()
+        return {"message":"Ad successfully deleted"} , 200
+    if request.method=='GET':
+        return {"id":ad.id , "campaign_id":id , "name":ad.name ,
+                                    "influencer_id":ad.influencer_id , "messages":ad.messages ,
+                                    "requirements":ad.requirements,"amount":ad.amount,
+                                    "status":ad.status ,"created_by":ad.created_by,"sent_to":ad.sent_to,"current_user_id":current_user_id
+                    }, 200
+    if  request.method=='PUT':
+        requirements=request.json.get('requirements')
+        amount=request.json.get('amount')
+        messages=request.json.get('messages')
+        if not (requirements or amount or messages):
+            return {"message":"Invalid requirements or amount or messages "} , 400
+        ad.requirements=requirements
+        ad.amount=amount
+        ad.messages+=messages
+        db.session.commit()
+        return {"message":"Sucesfully updated ad"} , 200
+        
+            
+        
+        
+        
     
 
+@api.route("/updateCampaign/<int:id>", methods=['GET','PUT'])
+@cross_origin(origin='http://localhost:5173')
+@auth_required("token")
+@roles_accepted('sponsor')
+def get_updateCampaign(id):
+    if request.method=='GET':
+        camp=db.session.query(Campaign).filter_by(id=id).first()
+        return {"id":camp.id  , "campaignName":camp.campaignName ,
+                                  "sponsor_id":camp.sponsor_id , "visibility":camp.visibility ,
+                                  "budget":camp.budget ,"niche":camp.niche,
+                                  "goals":camp.goals}, 200
+    camp=db.session.query(Campaign).filter_by(id=id).first()
+    goals=request.json.get('goals')
+    budget=request.json.get('budget')
+    if not (goals or budget):
+         return {"message":"Invalid goals or budget"} , 400
+    camp.budget=budget
+    camp.goals=goals
+    db.session.commit()
+    return {"message":"Sucesfully updated campaign"} , 200
+    
+    
+    
+  
+        
+        
+        

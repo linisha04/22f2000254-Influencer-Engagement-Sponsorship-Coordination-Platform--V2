@@ -69,7 +69,7 @@ class Sponsor(db.Model , UserMixin):
 
 class Campaign(db.Model):
     __tablename__ = "Campaign"
-    id=db.Column(db.Integer() , primary_key=True , autoincrement=True)
+    id=db.Column(db.Integer() , primary_key=True , autoincrement=True , nullable=False)
     campaignName=db.Column(db.String(),nullable=False , unique=True)
     sponsor_id = db.Column(db.Integer(), db.ForeignKey('Sponsor.id') , nullable=False)
     visibility=db.Column(db.String() , nullable=False)
@@ -86,7 +86,7 @@ class Campaign(db.Model):
 
 class AdRequest(db.Model):
     __tablename__ = "AdRequest" 
-    id=db.Column(db.Integer() , primary_key=True , autoincrement=True)
+    id=db.Column(db.Integer() , primary_key=True , autoincrement=True,nullable=False)
     campaign_id=db.Column(db.Integer(), db.ForeignKey('Campaign.id') , nullable=False)
     name=db.Column(db.String(),nullable=False, unique=True)
     influencer_id = db.Column(db.Integer, db.ForeignKey('Influencer.id'),nullable=True)

@@ -1,6 +1,8 @@
 <script setup>
 import { RouterView } from "vue-router";
 import store from '@/store';
+import router from "@/router";
+
 
 </script>
 <template>
@@ -18,6 +20,7 @@ import store from '@/store';
          <th scope="col">budget</th>
          <th scope="col">niche</th>
          <th scope="col">goals</th>
+         <th scope="col">Create Ad req</th>
        </tr>
      </thead>
      <tbody>
@@ -29,6 +32,9 @@ import store from '@/store';
          <td>{{ camp.budget }}</td>
          <td>{{ camp.niche }}</td>
          <td>{{ camp.goals }}</td>
+         <td>{{ camp.goals }}</td>
+         <td class="table-primary"><button  @click="router.push(`/createAdRequest/campaign_id/${camp.id}`)" >Create Ad Requests</button></td>
+
        </tr>
      </tbody>
    </table>

@@ -18,7 +18,7 @@ import { RouterLink } from 'vue-router'
                     </li>
                    
                     <li class="nav-item">
-                        <RouterLink class="nav-link active" to="/influencerView/campaignsPublic"> Campaigns</RouterLink>
+                        <RouterLink class="nav-link active" to="/influencerView/campaignsPublic"> Public Campaigns</RouterLink>
 
                         
                     </li>

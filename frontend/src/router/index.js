@@ -8,13 +8,13 @@ import InfluencerRegister from '@/views/InfluencerRegister.vue';
 
 import CreateAdRequest from '@/views/createAdRequest.vue';
 import ViewAdRequests from '@/views/ViewAdRequests.vue';
+import UpdateAdRequest from '@/views/UpdateAdRequest.vue';
 
 import SponsorDashboard from '@/views/Sponsor/SponsorDashboard.vue';
 import CreateCampaign from '@/views/Sponsor/CreateCampaign.vue';
 import SponsorView from '@/views/Sponsor/SponsorView.vue';
 import ViewCampaign from '@/views/Sponsor/ViewCampaign.vue';
 import UpdateCampaign from '@/views/Sponsor/UpdateCampaign.vue';
-
 
 import InfluencerView from '@/views/Influencer/InfluencerView.vue';
 import DashboardInfluencer from '@/views/Influencer/DashboardInfluencer.vue';
@@ -62,6 +62,15 @@ const router = createRouter({
       meta: {  requiresAuth: true},
       props: true
     },
+    {
+
+      path:'/updateAdRequests/AdID/:id',
+      name:'UpdateAdRequests',
+      component:UpdateAdRequest,
+      meta:{requiresAuth: true},
+      props:true
+
+    },
    
     {
       path:'/sponsorView',
@@ -89,8 +98,8 @@ const router = createRouter({
           meta: {  requiresAuth: true,roleRequired: 'sponsor' },
         },
         {
-          path:"updateCampaign/:id",
-          name:'UpdateCampaign',
+          path:'updateCampaign/:id',
+          name:'updateCampaign',
           component:UpdateCampaign,
           meta: {  requiresAuth: true,roleRequired: 'sponsor' },
           props:true

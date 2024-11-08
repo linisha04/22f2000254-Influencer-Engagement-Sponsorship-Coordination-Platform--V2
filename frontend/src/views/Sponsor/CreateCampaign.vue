@@ -144,7 +144,7 @@ export default {
             const token = this.$store.getters.getToken;
             console.log(token);
             console.log("anove is token");
-            console.log(import.meta.env.VITE_BASEURL); // Should log the base URL
+            console.log(import.meta.env.VITE_BASEURL); 
             console.log(this.$store.getters.getToken);
             return valid
 
@@ -176,11 +176,6 @@ export default {
                     }
                 )
             };
-
-            // fetch(import.meta.env.VITE_BASEURL+"/createCampaign"  ,
-            //      {method : "POST" , headers:{"Content-Type" : "application/json" ,"Authorization": `Bearer ${store.getters.getToken}`},
-            //      body: JSON.stringify({campaignName: this.campaignName, niche: this.niche , budget:this.budget ,visibility:this.visibility , goals:this.goals})
-            //    })
 
         }
     }

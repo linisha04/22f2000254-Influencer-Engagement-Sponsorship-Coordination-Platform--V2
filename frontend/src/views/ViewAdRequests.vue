@@ -10,17 +10,6 @@ import NavSponsor from '@/components/Sponsor/NavSponsor.vue';</script>
       <thead>
         <tr>
           <th scope="col" class="table-light">AD Info</th>
-          <!-- <th scope="col" class="table-light">campaign_id</th>
-        <th scope="col" class="table-light">name</th>
-        <th scope="col" class="table-light">influencer_id</th>
-        <th scope="col" class="table-light">requirements</th>
-        <th scope="col" class="table-light">amount</th>
-        <th scope="col" class="table-light">status</th>
-        <th scope="col" class="table-light">created_by</th>
-        <th scope="col" class="table-light">sent_to</th> -->
-          <!-- <th scope="col" class="table-light">Update</th>
-        <th scope="col" class="table-light">Delete</th> -->
-
           <th scope="col" class="table-light"><button>
               <RouterLink class="nav-link active" aria-current="page" to="/sponsorView/dashboardSponsor">Dashboard
               </RouterLink>
@@ -30,61 +19,32 @@ import NavSponsor from '@/components/Sponsor/NavSponsor.vue';</script>
       <tbody>
         <tr v-for="ad in getAdRequests" :key="ad.id">
 
-          <td class="table-warning">Ad Id : {{ ad.id }} <br> campaign_id : {{ ad.campaign_id }} <br> Ad name :
-            {{ ad.name }}
-            <br> influencer_id : {{ ad.influencer_id }} <br> requirements : {{ ad.requirements }} <br> Ad Amount :
-            {{ ad.amount }}
-            <br> Ad status : {{ ad.status }} <br> Req Created by : {{ ad.created_by }} <br> Req sent to :
-            {{ ad.sent_to }}
-            <br> <button @click="updateCampaign(camp.id)">Update</button> <button
+          <td class="table-warning">Ad Id : {{ ad.id }} <br>
+            campaign_id : {{ ad.campaign_id }} <br>
+            Ad name :{{ ad.name }}<br>
+            influencer_id : {{ ad.influencer_id }} <br>
+            requirements : {{ ad.requirements }} <br>
+            Ad Amount :{{ ad.amount }}<br>
+            Ad status : <button class="btn btn-primary">{{ ad.status }}</button><br>
+
+            Req Created by : {{ ad.created_by }} <br>
+            Req sent to :{{ ad.sent_to }}
+            <br> <button @click="router.push(`/updateAdRequests/AdID/${ad.id}`)">Update</button> <button
               @click="deleteAd(ad.id)">Delete</button>
           </td>
-          <!-- <td class="table-warning">{{ ad.campaign_id }}</td>
-        <td class="table-warning">{{ ad.name }}</td>
-        <td class="table-warning">{{ ad.influencer_id }}</td>
-        <td class="table-warning">{{ ad.requirements }}</td>
-        <td class="table-warning">{{ ad.amount }}</td>
-        <td class="table-warning">{{ ad.status }}</td>
-        <td class="table-warning">{{ ad.created_by }}</td>
-        <td class="table-warning">{{ ad.sent_to }}</td> -->
-          <!-- <td class="table-warning"><button @click="updateCampaign(camp.id)">Update</button></td>
-        <td class="table-danger"><button @click="deleteCampaign(camp.id)">Delete</button></td> -->
           <td>
             <div class="card-body">
-              <h5 class="card-title">Messages</h5>
-              <div class="message-container" style="height: 300px; overflow-y: auto;">
-                <div>
-                  <h4>Sponsor</h4>
-                  <p>{{ ad.messages }}</p>
-                </div>
-                <!-- <div>
-            <h4>Second Message</h4>
-            <p>Donec elementum ligula eu sapien consequat eleifend...</p>
-        </div>
-        <div>
-            <h4>Third Message</h4>
-            <p>Aenean faucibus nibh et justo cursus id rutrum lorem imperdiet...</p>
-        </div>
-        <div>
-            <h4>Third Message</h4>
-            <p>Aenean faucibus nibh et justo cursus id rutrum lorem imperdiet...</p>
-        </div>
-        <div>
-            <h4>Third Message</h4>
-            <p>Aenean faucibus nibh et justo cursus id rutrum lorem imperdiet...</p>
-        </div>
-        <div>
-            <h4>Third Message</h4>
-            <p>Aenean faucibus nibh et justo cursus id rutrum lorem imperdiet...</p>
-        </div> -->
+              <h5 class="card-title">Negotiation</h5>
 
-              </div>
+              {{ ad.messages }}
+
+
             </div>
-            <form>
+            <form @submit.prevent="sendMessage">
               <div class="row mb-3">
                 <label for="campaignName" class="col-sm-2 col-form-label">Write Message</label>
                 <div class="col-sm-10">
-                  <input type="text" class="form-control" id="campaignName" v-model="newMessage"
+                  <input type="text" v-model="message" class="form-control" id="campaignName"
                     placeholder="Type message here"><br> <button type="submit" class="btn btn-primary"> Send </button>
                 </div>
               </div>
@@ -107,6 +67,14 @@ import NavSponsor from '@/components/Sponsor/NavSponsor.vue';</script>
 
   </div>
 
+
+
+
+
+
+
+
+
 </template>
 <script>
 
@@ -119,6 +87,7 @@ export default {
   data() {
     return {
       getAdRequests: null,
+      message: ''
 
 
     }
@@ -148,7 +117,7 @@ export default {
         })
     },
     deleteAd(id) {
-      fetch(import.meta.env.VITE_BASEURL + `/deleteAd/${id}`,
+      fetch(import.meta.env.VITE_BASEURL + `/get_update_delete_Ad/${id}`,
         {
           method: "DELETE",
           headers: {
@@ -158,12 +127,32 @@ export default {
           return router.push({ name: "ViewCampaign" })
         })
     },
-    
+    sendMessage() {
+
+      fetch(import.meta.env.VITE_BASEURL + `/get_update_delete_Ad/${this.id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          'Authentication-Token': store.getters.getToken
+        },
+        body: JSON.stringify({
+          messages: this.message
+        })
+      }).then(
+
+        x => {
+          return router.push({ name: "ViewCampaign" })
+        }
+      )
+
+
+    }
+
   },
   mounted() {
-      console.log("mounted")
-      this.getAds();
-    }
+    console.log("mounted")
+    this.getAds();
+  }
 
 }
 
