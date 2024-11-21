@@ -195,7 +195,7 @@ def createCampaign():
 @api.route("/viewCampaign")
 @cross_origin(origin='http://localhost:5173')
 @auth_required("token")
-@roles_accepted('sponsor')
+@roles_accepted('sponsor' , 'admin')
 def viewCampaign():
     userRoles=[role for role in current_user.get_roles()]
     if 'sponsor' in userRoles:
@@ -209,7 +209,22 @@ def viewCampaign():
                                   "goals":camp.goals})
             
         return all_campaigns , 200
-    return {"message":"Influencer Dashboard"}, 400
+    if 'admin' in userRoles:
+        all_campaigns=[]
+        campaigns=db.session.query(Campaign).all()
+        for camp in campaigns:
+            sponsor_id=camp.sponsor_id
+            user=db.session.query(User).filter_by(id=sponsor_id).first()
+            all_campaigns.append({"id":camp.id  , "campaignName":camp.campaignName ,
+                                  "sponsor_id":camp.sponsor_id , "visibility":camp.visibility ,
+                                  "budget":camp.budget ,"niche":camp.niche,
+                                  "goals":camp.goals , "sponsorName":user.username})
+            
+        return all_campaigns , 200
+        
+        
+        
+    return {"message":"Some problem"}, 400
    
        
     
@@ -373,14 +388,14 @@ def createAdrequest():
 @api.route("/viewAdRequests/campaign_id/<int:id>" , methods=['GET'])
 @cross_origin(origin='http://localhost:5173')
 @auth_required("token")
-@roles_accepted('sponsor','influencer' )
+@roles_accepted('sponsor','influencer' ,'admin')
 def getAdRequest(id):
     role=[role for role in current_user.get_roles()]
     if 'sponsor' in role:
         reqs=db.session.query(AdRequest).filter_by(campaign_id=id ).all()
         result_reqs=[]
         if reqs:
-            print(reqs)
+            
             for req in reqs:
                 result_reqs.append({"id":req.id , "campaign_id":id , "name":req.name ,
                                     "influencer_id":req.influencer_id , "messages":req.messages ,
@@ -411,12 +426,13 @@ def getAdRequest(id):
             return sentAds ,  200
         # result={"sentAds":sentAds,"receivedAds":receivedAds}    
         return [], 404
-        
-        
-        
+      
         
     return {"message":" there is some problem "} , 404
         
+
+
+
                 
 @api.route("/get_update_delete_Ad/<int:id>",methods=['DELETE','GET','PUT'])
 @cross_origin(origin='http://localhost:5173')
@@ -531,4 +547,68 @@ def search(keyword):
         return   result , 200  
     return {"message":"There is some error"} , 404        
         
+
         
+@api.route("/allAds",methods=['GET'])
+@cross_origin(origin='http://localhost:5173')   
+@auth_required("token")
+@roles_accepted('admin')
+def allAds():
+    role=[role for role in current_user.get_roles()]
+    if 'admin' in role:
+        allAds=[]
+        all=db.session.query(AdRequest).all()
+        if not all:
+            return {"Message":"No ads for admin dashboard"} , 404
+        for req in all:
+            allAds.append({"id":req.id , "campaign_id":req.id , "name":req.name ,
+                                    "influencer_id":req.influencer_id , "messages":req.messages ,
+                                    "requirements":req.requirements,"amount":req.amount,
+                                    "status":req.status ,"created_by":req.created_by,"sent_to":req.sent_to
+                    })
+            return  allAds , 200
+        
+        
+    return {"message":" there is some problem "} , 404
+
+        
+    
+@api.route('/allUsers', methods=['GET'])
+@cross_origin(origin='http://localhost:5173')   
+@auth_required("token")
+@roles_accepted('admin')
+def allUsers():
+    role=[role for role in current_user.get_roles()]
+    if 'admin' in role:
+        result=[]
+        users=db.session.query(User).all()
+        for i in users:
+            user_role=i.get_roles()
+            result.append({
+                'id':i.id,
+                'username':i.username,
+                'email':i.email,
+                'role':user_role,
+                'active':i.active,
+                'flagged':i.flagged
+
+                })
+        return result , 200
+    return {"message" : "there is some problem"}  , 404  
+         
+
+   
+        
+@api.route("/changeFlag/<int:user_id>" , methods=[ 'POST'])
+@cross_origin(origin='http://localhost:5173')
+@auth_required("token")
+@roles_accepted("admin")
+def changeFlag(user_id):
+    new_status=request.json.get("flagged")
+    user=db.session.query(User).filter_by(id=user_id).first()
+    if user:
+        user.flagged=new_status
+        db.session.commit()
+        return {"message":"change happened", "flagged now is":new_status} , 201
+    return {"message":"user not found"} , 404
+    

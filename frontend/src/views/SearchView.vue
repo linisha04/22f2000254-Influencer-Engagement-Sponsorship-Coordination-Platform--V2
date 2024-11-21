@@ -9,6 +9,7 @@ import store from '@/store';
 
 <template>
     <div v-if="store.getters.getRoles.includes('influencer')">
+        <div v-if="CampORInf.length>0">
 
         <table class="table  table-striped-columns fixed-top ">
             <thead>
@@ -23,7 +24,7 @@ import store from '@/store';
                             @click="router.push({ name: 'influencerDashboard' })">Dashboard</button></th>
                 </tr>
             </thead>
-            <div v-if="CampORInf.length>0">
+           
             <tbody>
                 <tr v-for="camp in CampORInf" :key="camp.id" class="table-success">
                     <!-- <th scope="row">1</th> -->
@@ -43,11 +44,16 @@ import store from '@/store';
 
                 </tr>
             </tbody>
-        </div>
-        <div>
-            No Public Campaigns for this niche
-        </div>
+       
+       
         </table>
+    </div>
+
+    <div v-else>
+            No Public Campaigns for this niche
+            <button type="button"
+            @click="router.push({ name: 'influencerDashboard' })">Dashboard</button>
+        </div>
 
     </div>
     <div v-if="store.getters.getRoles.includes('sponsor')">

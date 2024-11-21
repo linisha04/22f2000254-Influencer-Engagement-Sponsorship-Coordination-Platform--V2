@@ -9,6 +9,7 @@ import InfluencerRegister from '@/views/InfluencerRegister.vue';
 import CreateAdRequest from '@/views/createAdRequest.vue';
 import ViewAdRequests from '@/views/ViewAdRequests.vue';
 import UpdateAdRequest from '@/views/UpdateAdRequest.vue';
+import SearchView from '@/views/SearchView.vue';
 
 import SponsorDashboard from '@/views/Sponsor/SponsorDashboard.vue';
 import CreateCampaign from '@/views/Sponsor/CreateCampaign.vue';
@@ -23,7 +24,10 @@ import CampaignsPublic from '@/views/Influencer/CampaignsPublic.vue'
 
 import AdminView from '@/views/admin/AdminView.vue';
 import AdminDashboard from '@/views/admin/AdminDashboard.vue';
-import SearchView from '@/views/SearchView.vue';
+import AllCampaigns from '@/views/admin/AllCampaigns.vue';
+import FlagUsers from '@/views/admin/FlagUsers.vue';
+import AllAds from '@/views/admin/AllAds.vue';
+
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -150,6 +154,24 @@ const router = createRouter({
           component:AdminDashboard,
           meta: {  requiresAuth: true,roleRequired: 'admin' }
         },
+        {
+          path:'allCampaigns',
+          name:'AllCampaigns',
+          component:AllCampaigns,
+          meta:{requiresAuth:true , roleRequired:'admin'}
+        },
+        {
+          path:'flagUsers',
+          name:'FlagUsers',
+          component:FlagUsers,
+          meta:{requiresAuth:true , roleRequired:'admin'}
+        },
+        {
+          path:'allAds',
+          name:'AllAds',
+          component:AllAds,
+          meta:{requiresAuth:true , roleRequired:'admin'}
+        }
         
       ]
 

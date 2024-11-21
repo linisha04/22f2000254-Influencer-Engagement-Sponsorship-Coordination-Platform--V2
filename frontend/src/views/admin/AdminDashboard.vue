@@ -12,6 +12,7 @@ import store from '@/store';
   
   <br>
   
+  
   <br>
        
         <div v-if="userInfo && userInfo.sponsors_to_approve">
@@ -59,16 +60,11 @@ import store from '@/store';
     </div>
     <div v-else> Loading... </div>
   </div>
-  <br>
-  <br>
-  <br>
-  <br>
-  <hr>
-  <hr>
+  
+  
 
-  <hr>
-  <br>
-  <br>
+  
+  
      
 
 </template>

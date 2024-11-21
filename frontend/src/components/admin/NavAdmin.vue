@@ -17,19 +17,26 @@ import { RouterLink } from 'vue-router'
                         <RouterLink class="nav-link active" aria-current="page"  to="/adminView/adminDashboard" >Home</RouterLink>
                     </li>
                    
-                    <!-- <li class="nav-item">
-                        <RouterLink class="nav-link active" to="/adminView/new"> Campaigns</RouterLink>
+                    <li class="nav-item">
+                        <RouterLink class="nav-link active" to="/adminView/allCampaigns"> All Campaigns</RouterLink>
 
                         
-                    </li> -->
+                    </li>
+                    <li class="nav-item">
+                        <RouterLink class="nav-link active" to="/adminView/flagUsers"> Flag Users</RouterLink>
+
+                        
+                    </li>
+                    <li class="nav-item">
+                        <RouterLink class="nav-link active" to="/adminView/allAds"> All Ads</RouterLink>
+
+                        
+                    </li>
                     <li class="nav-item">
                         <RouterLink class="nav-link active" to="/"> Logout</RouterLink>
                     </li>
                 </ul>
-                <form class="d-flex" role="search">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success" type="submit">Search</button>
-                </form>
+                
             </div>
         </div>
     </nav>

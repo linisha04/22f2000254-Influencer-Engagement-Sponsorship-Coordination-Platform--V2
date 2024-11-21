@@ -83,14 +83,14 @@ import { RouterView } from "vue-router";
                             </div>
                             <div class="form-check">
                                 <input class="form-check-input" type="radio" name="status" id="accepted"
-                                    value="accept" v-model="adInfo.status">
+                                    value="accepted" v-model="adInfo.status">
                                 <label class="form-check-label" for="accept">
                                     Accept
                                 </label>
                             </div>
                             <div class="form-check ">
                                 <input class="form-check-input" type="radio" name="status" id="rejected"
-                                    value="reject" v-model="adInfo.status">
+                                    value="rejected" v-model="adInfo.status">
                                 <label class="form-check-label" for="reject">
                                     Reject
                                 </label>
