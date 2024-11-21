@@ -88,7 +88,7 @@ class AdRequest(db.Model):
     __tablename__ = "AdRequest" 
     id=db.Column(db.Integer() , primary_key=True , autoincrement=True,nullable=False)
     campaign_id=db.Column(db.Integer(), db.ForeignKey('Campaign.id') , nullable=False)
-    name=db.Column(db.String(),nullable=False, unique=True)
+    name=db.Column(db.String(),nullable=False)
     influencer_id = db.Column(db.Integer, db.ForeignKey('Influencer.id'),nullable=True)
     messages=db.Column(db.String(),default='Not Enough Details. Contact Sponsor')
     requirements=db.Column(db.String(),default='Not Enough Details. Contact Sponsor')

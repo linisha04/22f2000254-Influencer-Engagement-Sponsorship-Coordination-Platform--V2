@@ -53,8 +53,8 @@ import NavSponsor from '@/components/Sponsor/NavSponsor.vue';
                                         <td class="table-warning">{{ inf.followers }}</td>
                                         <td class="table-warning">{{ inf.earnings }}</td>
                                         <td class="table-warning">{{ inf.bio }}</td>
-                                        <td class="table-warning"><button @click="select(inf.id)">Select</button></td>
-
+                                        <td class="table-warning"><button type="button" @click="select(inf.id)">Select</button></td>
+                                     
 
                                     </tr>
                                 </tbody>
@@ -198,7 +198,7 @@ export default {
                         if (this.$store.getters.getRoles == 'influencer') {
                             router.push({ "name": "CampaignsPublic" })
         }else{
-            router.push({ "name": "createCampaign" })
+            router.push({ "name": "ViewAdRequests" })
         }
                         
                         
@@ -209,7 +209,7 @@ export default {
                         if (this.$store.getters.getRoles == 'influencer') {
                             router.push({ "name": "CampaignsPublic" })
         }else{
-            router.push({ "name": "createCampaign" })
+            router.push({ "name": "ViewAdRequests" })
         }
 
                         

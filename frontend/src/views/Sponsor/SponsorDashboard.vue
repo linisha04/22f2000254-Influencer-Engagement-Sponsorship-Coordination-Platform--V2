@@ -3,7 +3,7 @@ import NavSponsor from '@/components/Sponsor/NavSponsor.vue';
 import { RouterView } from "vue-router";
 import { ref } from 'vue';
 
-import CreateCampaign from './CreateCampaign.vue';
+// import CreateCampaign from './CreateCampaign.vue';
 import router from '@/router';
 import { RouterLink } from 'vue-router';
 import store from '@/store';
@@ -15,12 +15,20 @@ import { onMounted } from 'vue';
 
 <RouterView/>
 
-<div v-if="userInfo && userInfo.approved === 0">
-  <br>
-  <br>
-  <br>
-  <h1>wait till admin approves You</h1>
-  <RouterLink class="nav-link active" aria-current="page"  to="/" >Home</RouterLink>
+<div v-if="userInfo && !userInfo.approved">
+  <div class="d-flex justify-content-center align-items-center vh-100">
+  <div class="card" style="width: 48rem;">
+ 
+  <div class="card-body">
+    <h5 class="card-title">wait till admin approves You</h5>
+
+    <button type="button" @click="router.push({name:'homeView'})">Go Back</button>
+
+  </div>
+  </div>
+</div>
+
+  
 
 </div>
 
@@ -30,8 +38,8 @@ import { onMounted } from 'vue';
 
   <div class="card" style="width:max-content ;">
   <img src="/Users/linisha/Documents/MAD2/frontend/src/assets/Home Page.png" class="card-img-top" alt="Image">
- 
-   
+
+
   
   <ul class="list-group list-group-flush">
 
@@ -46,10 +54,15 @@ import { onMounted } from 'vue';
   </ul>
 
 </div>
-</div>
+  </div>
 
 <div v-else> 
-  Loading...
+
+
+  
+ 
+
+  
  </div>
 
 

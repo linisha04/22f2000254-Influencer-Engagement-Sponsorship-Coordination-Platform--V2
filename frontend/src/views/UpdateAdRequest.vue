@@ -36,14 +36,6 @@ import { RouterView } from "vue-router";
                         </div>
                     </div>
 
-                    
-
-
-
-
-                        
-                   
-
                     <button type="submit" class="btn btn-primary"> update the ad </button>
                 </form>
 
@@ -55,7 +47,7 @@ import { RouterView } from "vue-router";
         <div class="card mx-auto" style="width: 45rem;">
             <div class="card-body">
                 <h5 class="card-title">Update AD</h5>
-                <form @submit.prevent="updateAd">
+                <form @submit.prevent="updatedStatus">
                     <div class="row mb-3">
                         <label for="AdName" class="col-sm-2 col-form-label">Name</label>
                         <div class="col-sm-10">
@@ -90,14 +82,14 @@ import { RouterView } from "vue-router";
                                 </label>
                             </div>
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="status" id="accept"
+                                <input class="form-check-input" type="radio" name="status" id="accepted"
                                     value="accept" v-model="adInfo.status">
                                 <label class="form-check-label" for="accept">
                                     Accept
                                 </label>
                             </div>
                             <div class="form-check ">
-                                <input class="form-check-input" type="radio" name="status" id="reject"
+                                <input class="form-check-input" type="radio" name="status" id="rejected"
                                     value="reject" v-model="adInfo.status">
                                 <label class="form-check-label" for="reject">
                                     Reject
@@ -145,7 +137,6 @@ export default {
         }
     },
     methods:{
-
         getAdInfo() {
         console.log(this.id)
         fetch(import.meta.env.VITE_BASEURL + `/get_update_delete_Ad/${this.id}`, {
@@ -178,10 +169,36 @@ export default {
             }).then(
 
                 x => {
-                    return router.push({ name: "ViewCampaign" })
+                    if (this.$store.getters.getRoles == 'influencer') {
+                            router.push({ "name": "CampaignsPublic" })
+        }else{
+            router.push({ "name": "ViewCampaign" })
+        }
                 }
             )
         
+
+    },
+    updatedStatus(){
+
+        fetch(import.meta.env.VITE_BASEURL +`/get_update_delete_Ad/${this.id}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    'Authentication-Token': store.getters.getToken
+                },
+                body: JSON.stringify({status: this.adInfo.status
+                })
+            }).then(
+
+                x => {
+                    if (this.$store.getters.getRoles == 'influencer') {
+                            router.push({ "name": "CampaignsPublic" })
+        }else{
+            router.push({ "name": "ViewCampaign" })
+        }
+                }
+            )
 
     }
 

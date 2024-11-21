@@ -9,8 +9,44 @@ import store from '@/store';
 <template>
 
   <RouterView />
+  
+  <br>
+  
+  <br>
+       
+        <div v-if="userInfo && userInfo.sponsors_to_approve">
+       
+          <table class="table  table-striped-columns  fixed">
+            <thead>
+              <tr class="table-info">
+                <th scope="col">id</th>
+                <th scope="col">name</th>
+                <th scope="col">industry</th>
+                <th scope="col">budget</th>
+                <th scope="col">approved</th>
+                <th scope="col"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="sponsor in userInfo.sponsors_to_approve" :key="sponsor.id" class="table-success">
+                
+                <td>{{ sponsor.id }}</td>
+                <td>{{ sponsor.name }}</td>
+                <td>{{ sponsor.industry }}</td>
+                <td>{{ sponsor.budget }}</td>
+                <td>{{ sponsor.approved }}</td>
+                <td><button  @click="changeApproval(sponsor)">{{ sponsor.approved ? 'Revoke Approval' : 'Grant Approval' }}</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div v-else>
+          no sponsors to approve...
+        </div>
 
-  <div class="card" style="width: 80rem ;">
+
+
+        <div class="card" style="width: 80rem ;">
     <div v-if="userInfo">
       <ul class="list-group list-group-flush">
 
@@ -33,45 +69,7 @@ import store from '@/store';
   <hr>
   <br>
   <br>
-
-  <div class="container-xxl  ">
-    <div class="card mx-auto" style="width: 80rem;">
-      <div class="card-body">
-        <h5 class="card-title">Approve Sponsors</h5>
-        <div v-if="userInfo && userInfo.sponsors_to_approve">
-       
-          <table class="table  table-striped-columns ">
-            <thead>
-              <tr class="table-info">
-                <th scope="col">id</th>
-                <th scope="col">name</th>
-                <th scope="col">industry</th>
-                <th scope="col">budget</th>
-                <th scope="col">approved</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="sponsor in userInfo.sponsors_to_approve" :key="sponsor.id" class="table-success">
-                
-                <td>{{ sponsor.id }}</td>
-                <td>{{ sponsor.name }}</td>
-                <td>{{ sponsor.industry }}</td>
-                <td>{{ sponsor.budget }}</td>
-                <td>{{ sponsor.approved }}</td>
-                <td><button  @click="changeApproval(sponsor)">{{ sponsor.approved ? 'Revoke Approval' : 'Grant Approval' }}</button></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <div v-else>
-          no sponsors to approve...
-        </div>
-
-
-
-      </div>
-    </div>
-  </div>
+     
 
 </template>
 

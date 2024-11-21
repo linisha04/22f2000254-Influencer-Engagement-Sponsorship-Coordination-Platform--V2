@@ -1,5 +1,7 @@
 <script setup >
 import { RouterLink, RouterView } from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router';
+
 import store from "@/store";
 
 // import HelloWorld from '@/components/HelloWorld.vue'

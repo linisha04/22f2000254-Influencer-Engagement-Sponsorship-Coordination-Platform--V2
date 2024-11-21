@@ -335,11 +335,12 @@ def createAdrequest():
         campaign_id=request.json.get('campaign_id')
         created_by=current_user.id
         sent_to=influencer_id
+        
 
         is_created=db.session.query(AdRequest).filter_by(created_by=created_by ,sent_to=sent_to,campaign_id=campaign_id ).first()
         is_exists=db.session.query(AdRequest).filter_by(created_by=sent_to ,sent_to=created_by,campaign_id=campaign_id ).first()
 
-        if is_created:
+        if is_created or is_exists:
             return {"message":"Request Already exists. Choose new influencer"} , 409
         else:
             adRequest=AdRequest(name=ad_name,amount=amount,requirements=requirements,influencer_id=influencer_id ,
@@ -367,19 +368,12 @@ def createAdrequest():
         db.session.add(adRequest)
         db.session.commit()
         return {"message":"Adrequest successfully created"} , 201
-        
-        
-
-        
-        
-            
-        
-     
+    
         
 @api.route("/viewAdRequests/campaign_id/<int:id>" , methods=['GET'])
 @cross_origin(origin='http://localhost:5173')
 @auth_required("token")
-@roles_accepted('sponsor' )
+@roles_accepted('sponsor','influencer' )
 def getAdRequest(id):
     role=[role for role in current_user.get_roles()]
     if 'sponsor' in role:
@@ -395,13 +389,39 @@ def getAdRequest(id):
                     })
             return     result_reqs , 200
         return {"message":" No Adrequest "} , 404
-    return {"message":" You r not sponsor "} , 404
+    if 'influencer' in role:
+        sentAds=[]
+        receivedAds=[]
+        received=db.session.query(AdRequest).filter_by(campaign_id=id , sent_to=current_user.id).first()
+        if received:
+            receivedAds.append({"id":received.id , "campaign_id":id , "name":received.name ,
+                                    "influencer_id":received.influencer_id , "messages":received.messages ,
+                                    "requirements":received.requirements,"amount":received.amount,
+                                    "status":received.status ,"created_by":received.created_by,"sent_to":received.sent_to
+                    })
+            return receivedAds ,  200
+            
+        sent=db.session.query(AdRequest).filter_by(campaign_id=id , created_by=current_user.id).first()   
+        if sent:
+            sentAds.append({"id":sent.id , "campaign_id":id , "name":sent.name ,
+                                    "influencer_id":sent.influencer_id , "messages":sent.messages ,
+                                    "requirements":sent.requirements,"amount":sent.amount,
+                                    "status":sent.status ,"created_by":sent.created_by,"sent_to":sent.sent_to
+                    })
+            return sentAds ,  200
+        # result={"sentAds":sentAds,"receivedAds":receivedAds}    
+        return [], 404
+        
+        
+        
+        
+    return {"message":" there is some problem "} , 404
         
                 
 @api.route("/get_update_delete_Ad/<int:id>",methods=['DELETE','GET','PUT'])
 @cross_origin(origin='http://localhost:5173')
 @auth_required("token")
-@roles_accepted('sponsor')
+@roles_accepted('sponsor' , 'influencer')
 def get_update_delete_Ad(id):
     current_user_id=current_user.id
     ad=db.session.query(AdRequest).filter_by(id=id).first()
@@ -421,17 +441,28 @@ def get_update_delete_Ad(id):
         requirements=request.json.get('requirements')
         amount=request.json.get('amount')
         messages=request.json.get('messages')
-        if not (requirements or amount or messages):
-            return {"message":"Invalid requirements or amount or messages "} , 400
-        ad.requirements=requirements
-        ad.amount=amount
-        ad.messages+=messages
-        db.session.commit()
-        return {"message":"Sucesfully updated ad"} , 200
+        status=request.json.get('status')
+        # if not (requirements or amount or messages):
+        #     return {"message":"Invalid requirements or amount or messages "} , 400
+        if messages:
+            ad.messages=messages
+            db.session.commit()
+            return {"message":"Sucesfully msg sent"} , 200
         
+        if (amount or requirements) :
+            if amount:
+                ad.amount=amount  
+            if   requirements:    
+                ad.requirements=requirements
+            db.session.commit()
+            return {"message":"Sucesfully updated ad"} , 200
+        if status:
+            ad.status=status
+            db.session.commit()
+            return {"message":"Sucesfully changed the status of ad"} , 200
             
-        
-        
+            
+    return {"message":"Some problem ig"} , 200    
         
     
 
@@ -455,10 +486,49 @@ def get_updateCampaign(id):
     camp.goals=goals
     db.session.commit()
     return {"message":"Sucesfully updated campaign"} , 200
-    
-    
-    
-  
         
+@api.route("/search/<string:keyword>",methods=['GET','POST'])
+@cross_origin(origin='http://localhost:5173')   
+@auth_required("token")
+@roles_accepted('sponsor','influencer') 
+def search(keyword):
+    role=[role for role in current_user.get_roles()]
+    if keyword.lower() in ["fashion" , "beauty" , "lifestyle"]:
+        keyword="Fashion&Beauty&Lifestyle"
+    if keyword.lower() in ["health" , "wellness"]:
+        keyword="Health&Wellness"
+    if keyword.lower() in ["travel" , "adventure"]:
+        keyword="Travel&Adventure"
+    if keyword.lower() in ["tech" , "gaming"]:
+        keyword="Tech&Gaming"
+    if keyword.lower() in ["Food&Cooking&Lifestyle"]:
+        keyword="Food&Cooking&Lifestyle"       
+    if keyword.lower() in ["education" , "learning"]:
+        keyword="Education&Learning"                     
+    
+    if 'sponsor' in role:
+        result=[]
+        infs=db.session.query(Influencer).filter_by(niche=keyword).all()
+        if not infs:
+            return {"message":"Bad keyword"} , 404
+        for i in infs:
+            result.append(
+                { "id":i.id, "followers":i.followers, "niche":i.niche,   "earnings":i.earnings,"bio":i.bio, "username":current_user.username})
+        
+        return result, 200
+    if 'influencer' in role:
+        result=[]
+        publicCamps=db.session.query(Campaign).filter_by(niche=keyword , visibility="public").all()
+        if not publicCamps:
+            return {"message":"Bad keyword"} , 404
+        for camp in publicCamps:
+            result.append({
+                "id":camp.id  , "campaignName":camp.campaignName ,
+                                  "sponsor_id":camp.sponsor_id , "visibility":camp.visibility ,
+                                  "budget":camp.budget ,"niche":camp.niche,
+                                  "goals":camp.goals
+                })
+        return   result , 200  
+    return {"message":"There is some error"} , 404        
         
         

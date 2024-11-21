@@ -7,11 +7,9 @@ import router from "@/router";
 </script>
 <template>
     <div class="container-xxl  ">
-           <div class="card mx-auto" style="width: 80rem;">
-               <div class="card-body">
-                   <h5 class="card-title">Campaigns</h5>
+           
    
-   <table class="table  table-striped-columns " >
+   <table class="table  table-striped-columns fixed-top " >
        <thead>
        <tr class="table-info">
          <th scope="col">id</th>
@@ -20,7 +18,7 @@ import router from "@/router";
          <th scope="col">budget</th>
          <th scope="col">niche</th>
          <th scope="col">goals</th>
-         <th scope="col">Create Ad req</th>
+         <th scope="col">Create Ad req <button type="button" @click="router.push({name:'influencerDashboard'})">Dashboard</button></th>
        </tr>
      </thead>
      <tbody>
@@ -31,9 +29,13 @@ import router from "@/router";
          <td>{{ camp.visibility }}</td>
          <td>{{ camp.budget }}</td>
          <td>{{ camp.niche }}</td>
+  
          <td>{{ camp.goals }}</td>
-         <td>{{ camp.goals }}</td>
-         <td class="table-primary"><button  @click="router.push(`/createAdRequest/campaign_id/${camp.id}`)" >Create Ad Requests</button></td>
+         <td class="table-primary">
+          <button  @click="router.push(`/createAdRequest/campaign_id/${camp.id}`)" >Create Ad Requests</button>
+          <button  @click="router.push(`/viewAdRequests/campaign_id/${camp.id}`)" >view Ad Requests</button>
+        
+        </td>
 
        </tr>
      </tbody>
@@ -41,8 +43,8 @@ import router from "@/router";
    
    
    
-   </div>
-           </div>
+  
+         
        </div>
 </template>
 

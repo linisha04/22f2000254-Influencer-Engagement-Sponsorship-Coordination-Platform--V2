@@ -23,6 +23,7 @@ import CampaignsPublic from '@/views/Influencer/CampaignsPublic.vue'
 
 import AdminView from '@/views/admin/AdminView.vue';
 import AdminDashboard from '@/views/admin/AdminDashboard.vue';
+import SearchView from '@/views/SearchView.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -70,6 +71,13 @@ const router = createRouter({
       meta:{requiresAuth: true},
       props:true
 
+    },
+    {
+     path:'/search/keyword/:word',
+     name:'SearchView',
+     component:SearchView,
+     meta:{  requiresAuth: true},
+     props:true
     },
    
     {
