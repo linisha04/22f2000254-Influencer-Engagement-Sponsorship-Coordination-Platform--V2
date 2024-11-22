@@ -3,7 +3,7 @@ from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from flask_security import Security, SQLAlchemyUserDatastore
 from werkzeug.security import generate_password_hash
-
+from application.utils import celery_init_app
 def create_app():
     from application.models import db , Sponsor , Influencer  , Role , User  
     from application.routes import api
@@ -11,6 +11,10 @@ def create_app():
     app=Flask(__name__)
     app.config['SECRET_KEY']='qwertyui'
     app.config["SQLALCHEMY_DATABASE_URI"]="sqlite:///project_iESCP.db"
+    app.config["CELERY"] = {"broker_url": "redis://localhost",
+                            # "result_backend": "redis://localhost",
+                             "result_backend": "redis://localhost",
+                            "broker_connection_retry_on_startup": True}
     
    
     db.init_app(app)
@@ -37,11 +41,17 @@ def create_app():
                             
       
 
-    app.register_blueprint(api)        
+    app.register_blueprint(api)      
+
+  
 
 
     return app
 
+app = create_app()
+celery = celery_init_app(app)
 if __name__ == "__main__":
-    app=create_app()
+    # app=create_app()
+    # celery=celery_init_app(app)  
+
     app.run(debug=True)

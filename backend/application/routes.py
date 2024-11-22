@@ -4,8 +4,9 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from flask_security import Security, login_user , roles_required ,auth_required ,roles_accepted ,login_required,current_user
 from .models import Influencer, Sponsor, User, db,   Role,Campaign,AdRequest
 from flask_cors import cross_origin
-
-
+from .worker import hello
+from celery.result import AsyncResult
+from celery import Celery, Task
 api=Blueprint("api",__name__)
 
 
@@ -612,3 +613,12 @@ def changeFlag(user_id):
         return {"message":"change happened", "flagged now is":new_status} , 201
     return {"message":"user not found"} , 404
     
+@api.route("/hello")
+def greet():
+    task=hello.delay()
+    return task.id
+
+@api.route("/result/<string:id>")
+def say(id):
+    result=AsyncResult(id)
+    return result.get()
