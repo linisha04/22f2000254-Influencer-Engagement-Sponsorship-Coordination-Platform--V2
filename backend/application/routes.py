@@ -1,12 +1,16 @@
-from flask import Blueprint, request , redirect, url_for ,jsonify
+from flask import Blueprint, request , redirect, url_for ,jsonify , send_file
 from flask import current_app as app
 from werkzeug.security import check_password_hash, generate_password_hash 
 from flask_security import Security, login_user , roles_required ,auth_required ,roles_accepted ,login_required,current_user
 from .models import Influencer, Sponsor, User, db,   Role,Campaign,AdRequest
 from flask_cors import cross_origin
-from .worker import hello
+from .worker import export_csv
 from celery.result import AsyncResult
 from celery import Celery, Task
+from io import BytesIO
+from .cache import cache
+
+
 api=Blueprint("api",__name__)
 
 
@@ -195,6 +199,7 @@ def createCampaign():
 
 @api.route("/viewCampaign")
 @cross_origin(origin='http://localhost:5173')
+@cache.cached(10)
 @auth_required("token")
 @roles_accepted('sponsor' , 'admin')
 def viewCampaign():
@@ -613,12 +618,26 @@ def changeFlag(user_id):
         return {"message":"change happened", "flagged now is":new_status} , 201
     return {"message":"user not found"} , 404
     
-@api.route("/hello")
-def greet():
-    task=hello.delay()
-    return task.id
+@api.route("/export")
+@cross_origin(origin='http://localhost:5173')
+@auth_required("token")
+@roles_required("sponsor")
+def export():
+    user = db.session.query(User).filter_by(id=current_user.id).first()
+    task=export_csv.delay(user.id)
+    return jsonify({"id": task.id})
 
-@api.route("/result/<string:id>")
-def say(id):
+@api.route("/export/<string:id>/status")
+def export_status(id):
     result=AsyncResult(id)
-    return result.get()
+    print(result.get())
+   
+    return  {"status": result.status}
+
+
+@api.route("/export/<string:id>")
+def export_download(id):
+    result=AsyncResult(id)
+    file=BytesIO(result.result.encode())
+    return send_file(file, "text", as_attachment=True , download_name="export.csv")
+

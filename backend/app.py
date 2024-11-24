@@ -4,9 +4,14 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_security import Security, SQLAlchemyUserDatastore
 from werkzeug.security import generate_password_hash
 from application.utils import celery_init_app
+from application.worker import daily_reminders , monthlyReport
+from celery.schedules import crontab
+
+
 def create_app():
     from application.models import db , Sponsor , Influencer  , Role , User  
     from application.routes import api
+    from application.cache import cache
 
     app=Flask(__name__)
     app.config['SECRET_KEY']='qwertyui'
@@ -20,6 +25,7 @@ def create_app():
     db.init_app(app)
    
     CORS(app, resources={r"/*": {"origins": "*"}}) 
+    cache.init_app(app)
     datastore = SQLAlchemyUserDatastore(db, User, Role)
     app.security=Security(app,datastore)  
    
@@ -50,6 +56,16 @@ def create_app():
 
 app = create_app()
 celery = celery_init_app(app)
+
+
+@celery.on_after_configure.connect
+def setup_periodic_tasks(sender, **kwargs):
+    from application.worker import daily_reminders
+
+    sender.add_periodic_task(crontab(minute="*"), daily_reminders.s(), name="say hello")
+    sender.add_periodic_task(crontab(minute="*"), monthlyReport.s(), name="montly hello")
+    # sender.add_periodic_task(crontab(day_of_month="*"), monthlyReport.s(), name="montly hello")
+
 if __name__ == "__main__":
     # app=create_app()
     # celery=celery_init_app(app)  

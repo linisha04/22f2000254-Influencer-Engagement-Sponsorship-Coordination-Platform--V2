@@ -75,6 +75,7 @@ import NavSponsor from '@/components/Sponsor/NavSponsor.vue';</script>
     </div>
 
     <div v-else>
+      <div>
      
       <div v-if="store.getters.getRoles==='sponsor'">
         <RouterLink class="nav-link active" aria-current="page" to="/sponsorView/dashboardSponsor">Dashboard</RouterLink>
@@ -88,7 +89,7 @@ Currently no ad requests for this campaign
 
       </div>
 
-     
+    </div>
     </div>
 
 </template>

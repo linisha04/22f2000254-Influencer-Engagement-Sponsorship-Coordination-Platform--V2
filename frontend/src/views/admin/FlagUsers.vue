@@ -15,7 +15,8 @@ import router from "@/router";
          <th scope="col">Email</th>
          <th scope="col">Role</th>
          <th scope="col">Is Active</th>
-         <th scope="col">Flagged   <button type="button" @click="router.push({name:'AdminDashboard'})">Dashboard</button></th>
+         <th scope="col">Flagged  </th>
+         <button type="button" @click="router.push({name:'AdminDashboard'})">Dashboard</button>
          
         
        </tr>
@@ -30,7 +31,8 @@ import router from "@/router";
          <td>{{ user.active }}</td>
   
          <!-- <td>{{ i.flagged }}</td> -->
-         <button  @click="changeFlag(user)">{{ user.flagged ? ' Unflag' : 'Flagged' }}</button>
+          <td>
+         <button  @click="changeFlag(user)">{{ user.flagged ? ' Unflag' : 'Flagged' }}</button></td>
 
        </tr>
      </tbody>

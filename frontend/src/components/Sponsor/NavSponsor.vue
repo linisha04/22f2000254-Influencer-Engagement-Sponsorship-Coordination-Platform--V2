@@ -24,6 +24,10 @@ import router from '@/router';
 
                 </li>
                 <li class="nav-item">
+                    <button class="nav-link active"  @click="do_export()">Export</button>
+
+                </li>
+                <li class="nav-item">
                     <RouterLink class="nav-link active" to="/sponsorView/viewCampaign">View Campaign</RouterLink>
                 </li>
                 <li class="nav-item">
@@ -48,7 +52,8 @@ import router from '@/router';
 export default {
     data(){
         return{
-            keyword:null
+            keyword:null,
+            export_id:null
         }
     }
     , 
@@ -57,6 +62,60 @@ export default {
             if(this.keyword){
                 router.push(`/search/keyword/${this.keyword}`)
             }
+        },
+        do_export(){
+            fetch(import.meta.env.VITE_BASEURL+"/export",
+            {
+                method: 'GET',
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authentication-Token": store.getters.getToken
+
+                },
+
+            }
+            ).then(
+                x=>{return x.json()
+
+                }
+            ).then(
+              
+                x=>{
+                    this.export_id=x["id"] 
+                    setTimeout(()=> 
+                this.export_status(this.export_id) , 2000)
+                 console.log(x["id"])
+                }
+            )
+        },
+        export_status(id){
+            fetch(import.meta.env.VITE_BASEURL+"/export/"+id+"/status",
+            {
+                method: 'GET',
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authentication-Token": store.getters.getToken
+
+                },
+
+            }
+                
+            ).then(
+                x=>{return x.json()
+
+                }
+            ).then(
+              
+                x=>{
+                if(x["status"]=="SUCCESS"){
+                  open(import.meta.env.VITE_BASEURL+`/export/${id}`)
+                }else{
+                    setTimeout(()=>this.export_status(this.export_id) ,2000)
+                }
+                
+                }
+            )
+
         }
     }
 }
