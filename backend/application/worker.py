@@ -14,9 +14,9 @@ from sqlalchemy.sql import func
 
 @shared_task
 def hello():
-    print("hello")
+   
     time.sleep(10)
-    print("Hi")
+   
     return "Hello"
 
 @shared_task

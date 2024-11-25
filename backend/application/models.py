@@ -61,7 +61,7 @@ class Sponsor(db.Model , UserMixin):
     name=db.Column(db.String(), default='Name your company')
     industry=db.Column(db.String())
     approved=db.Column(db.Boolean , default=False)
-    budget=db.Column(db.Integer() , default=0)
+    budget=db.Column(db.Integer() , default=10000)
     campaign=db.relationship('Campaign', backref='sponsor', lazy=True)
    
     
