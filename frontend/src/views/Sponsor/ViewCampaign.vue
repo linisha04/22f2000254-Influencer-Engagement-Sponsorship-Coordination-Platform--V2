@@ -11,7 +11,7 @@ import { RouterView } from "vue-router";
 <template>
 
 
-  <table class="table  table-striped-columns fixed-top ">
+  <table class="table  table-striped-columns fixed-top " style="background-color: brown;">
     <thead>
       <tr>
         <th scope="col" class="table-light">id</th>
@@ -23,26 +23,27 @@ import { RouterView } from "vue-router";
         <th scope="col" class="table-light">Update</th>
         <th scope="col" class="table-light">Delete</th>
         <th scope="col" class="table-light">View Ad Requests</th>
-        <th scope="col" class="table-light">Create Ad Requests</th>
-        <th scope="col" class="table-light"><button>
-            <RouterLink class="nav-link active" aria-current="page" to="/sponsorView/dashboardSponsor">Dashboard</RouterLink>
-          </button></th>
+        <th scope="col" class="table-light">Create Ad Requests  <button @click='router.push({ name: "sponsorDashboard" })'>Dashboard</button></th>
+       
       </tr>
     </thead>
     <tbody>
       <tr v-for="camp in userCamps" :key="camp.id">
-       
+
         <td class="table-warning">{{ camp['id'] }}</td>
         <td class="table-warning">{{ camp['campaignName'] }}</td>
         <td class="table-warning"> {{ camp['visibility'] }}</td>
         <td class="table-warning">{{ camp['budget'] }}</td>
         <td class="table-warning">{{ camp['niche'] }}</td>
         <td class="table-warning">{{ camp['goals'] }}</td>
-        <td class="table-primary"><button  @click="router.push(`/sponsorView/updateCampaign/${camp.id}`)" >update</button></td>
+        <td class="table-primary"><button @click="router.push(`/sponsorView/updateCampaign/${camp.id}`)">update</button>
+        </td>
         <td class="table-danger"><button @click="deleteCampaign(camp.id)">Delete</button></td>
-        <td class="table-success"><button @click="router.push(`/viewAdRequests/campaign_id/${camp.id}`)">View Ad Requests</button></td>
-        <td class="table-primary"><button  @click="router.push(`/createAdRequest/campaign_id/${camp.id}`)" >Create Ad Requests</button></td>
-       
+        <td class="table-success"><button @click="router.push(`/viewAdRequests/campaign_id/${camp.id}`)">View Ad
+            Requests</button></td>
+        <td class="table-primary"><button @click="router.push(`/createAdRequest/campaign_id/${camp.id}`)">Create Ad
+            Requests</button></td>
+
 
       </tr>
     </tbody>
@@ -94,7 +95,7 @@ export default {
         })
 
     },
-  
+
   },
   mounted() {
 

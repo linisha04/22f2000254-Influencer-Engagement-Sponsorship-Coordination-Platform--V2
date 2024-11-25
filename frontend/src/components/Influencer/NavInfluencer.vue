@@ -1,11 +1,12 @@
 <script setup>
 import { RouterLink } from 'vue-router'
 import router from '@/router';
+import store from '@/store';
 
 </script>
 
 <template>
-    <nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top">
+    <nav class="navbar navbar-expand-lg  fixed-top" style="background-color:burlywood;">
         <div class="container-fluid">
             <a class="navbar-brand">Influencer Dashboard</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -27,7 +28,7 @@ import router from '@/router';
 
                     </li>
                     <li class="nav-item">
-                        <RouterLink class="nav-link active" to="/"> Logout</RouterLink>
+                        <button class="nav-link active" @click="logout"> Logout</button>
                     </li>
                 </ul>
                 <form class="d-flex" role="search" @submit.prevent="search">
@@ -55,6 +56,21 @@ export default {
     }
     ,
     methods: {
+        logout() {
+            fetch(import.meta.env.VITE_BASEURL + "/logout", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    'Authentication-Token': store.getters.getToken
+                }
+            }).then(
+
+                x => {
+                    store.dispatch('logout')
+                    router.push('/signin')
+                }
+            )
+        },
         search() {
             if (this.keyword) {
                 router.push(`/search/keyword/${this.keyword}`)

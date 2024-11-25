@@ -7,8 +7,10 @@ import { RouterView } from "vue-router";
 <template>
 
 
+<br>
+<br>
 
-<table class="table  table-striped-columns fixed-top ">
+<table class="table  table-striped-columns  ">
     <thead>
       <tr>
         <th scope="col" class="table-light"> Campaign Id</th>
@@ -20,7 +22,7 @@ import { RouterView } from "vue-router";
         <th scope="col" class="table-light">Niche</th>
         <th scope="col" class="table-light">Goals</th>
           <th scope="col" class="table-light">
-            <button type="button" @click="router.push({name:'AdminDashboard'})">Dashboard</button>
+       
         
 
          </th>

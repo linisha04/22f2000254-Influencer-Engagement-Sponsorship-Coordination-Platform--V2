@@ -19,10 +19,10 @@ export default createStore({
             state.user = value ;
             // || { token: null, roles: [] }
         },
-        signout(state){
-            state.user=null;
-            state.token=null;
-        }
+        clearUser(state) {
+            state.user = { token: null, roles: [] };
+            localStorage.removeItem('user');
+          },
        
     },
     getters: {
@@ -38,7 +38,7 @@ export default createStore({
     },
     actions:{
         logout({ commit }){
-            commit('signout');
+            commit('clearUser');
         }
        
 

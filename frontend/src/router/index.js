@@ -191,58 +191,26 @@ router.beforeEach((to, from, next) => {
   console.log("Token:", token);
   
   
-
-
-  if (to.matched.some(record => record.meta.requiresAuth && !token)) {
-    next('/signin');
-  } else {
-    const requiredRole = to.matched.find(record => record.meta.roleRequired)?.meta.roleRequired;
-    if (requiredRole && !roles.includes(requiredRole)) {
-      next('/'); // Redirect to home or an unauthorized page
-    } else {
-      next();
-    }
+  if(!store.getters.getRoles.includes("admin") && to.fullPath.startsWith("/adminView")){
+    return next("/");
   }
-
-    if(to.fullPath.startsWith("signout")){
-    store.commit("setUser", {token: null, roles: []});
-    console.log("logged out")
-  next('/');
+  if(!store.getters.getToken && (to.fullPath.startsWith("/admin") || to.fullPath.startsWith("/influencerView")||to.fullPath.startsWith("/sponsorView"))){
+    return next("/");
   }
- 
+  if(!store.getters.getRoles.includes("influencer") && to.fullPath.startsWith("/influencerView")){
+    return next("/");
+  }
+  if(!store.getters.getRoles.includes("sponsor") && to.fullPath.startsWith("/sponsorView")){
+    return next("/");
+  }
+  next();
+
+   
 
 });
 
 export default router;
 
-// router.beforeEach((to , from , next ) =>{
-//   const roles=store.getters.getRoles;
-//   const token=store.getters.getToken;
-//   console.log("Roles:", roles);
-//   console.log("Token:", token);
-
-//   if (to.matched.some(record => record.meta.requiresAuth && !token)) {
-//     return next('/');
-//   }
-//   if (to.matched.some(record => record.meta.roleRequired && !roles.includes(record.meta.roleRequired))) {
-//     return next('/');
-//   }
-
-//   if(!roles.includes("influencer") && to.name=="DashboardInfluencer"){
-//     return  next('/');
-//   }
-//   if(!roles.includes("sponsor") && to.name==("sponsorDashboard")){
-//     return  next('/');
-//   }
-//   if(to.fullPath.startsWith("signout")){
-//     store.commit("setUser", {token: null, roles: []});
-//   next('/');
-//   }
-//   next()
-// });
-
-
-// export default router
 
 
 
@@ -257,15 +225,3 @@ export default router;
 
 
 
-
-
-
-
-
-
-  // if(!roles.includes("admin") && to.fullPath.startsWith("/admin")){
-  //   return next('/');
-  // }
-  // if(!token && ((to.name ==("adminDashboard")) ||(to.fullPath.startsWith("/influencerDashboard")) ||(to.fullPath.startsWith("/sponsorDashboard")) )){
-  //   return  next('/');
-  // }

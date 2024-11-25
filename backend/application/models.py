@@ -52,8 +52,7 @@ class Influencer(db.Model ,UserMixin):
     
    
    
-   
-    
+
 
         
 class Sponsor(db.Model , UserMixin):

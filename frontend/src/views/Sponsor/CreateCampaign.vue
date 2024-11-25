@@ -135,17 +135,20 @@ export default {
         validate() {
 
             let valid = true;
-            if (!this.campaignName || !this.campaignName || !this.budget || !this.niche || !this.goals) {
+            if (!this.campaignName || !this.campaignName  || !this.niche || !this.goals) {
                 valid = false;
                 alert("Please enter valid form details");
             }
+            if ( this.budget <0|| !this.budget){
+                valid = false;
+                alert("Budget cant be less than zero");
 
-            console.log(this.campaignName, this.campaignName, this.niche, this.budget)
+            }
+
+
+            
             const token = this.$store.getters.getToken;
-            console.log(token);
-            console.log("anove is token");
-            console.log(import.meta.env.VITE_BASEURL); 
-            console.log(this.$store.getters.getToken);
+        
             return valid
 
 

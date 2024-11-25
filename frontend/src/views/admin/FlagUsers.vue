@@ -3,11 +3,10 @@ import store from '@/store';
 import router from "@/router";
 </script>
 <template>
-
-
-          
-   
-<table class="table  table-striped-columns fixed-top " >
+  
+   <br>
+   <br>
+<table class="table  table-striped-columns " >
        <thead>
        <tr class="table-info">
         <th scope="col">Id</th>
@@ -16,7 +15,7 @@ import router from "@/router";
          <th scope="col">Role</th>
          <th scope="col">Is Active</th>
          <th scope="col">Flagged  </th>
-         <button type="button" @click="router.push({name:'AdminDashboard'})">Dashboard</button>
+        
          
         
        </tr>

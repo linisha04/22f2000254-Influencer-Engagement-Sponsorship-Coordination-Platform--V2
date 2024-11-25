@@ -3,94 +3,95 @@ import store from '@/store';
 import router from "@/router";
 import NavSponsor from '@/components/Sponsor/NavSponsor.vue';</script>
 <template>
- 
-    <div v-if="getAdRequests && getAdRequests.length > 0">
 
-      <table class="table  table-striped-columns fixed-top ">
-        <thead>
-          <tr>
-            <th scope="col" class="table-light">AD Info</th>
-            <th scope="col" class="table-light"><button>
+  <div v-if="getAdRequests && getAdRequests.length > 0">
 
-              <div v-if="store.getters.getRoles==='sponsor'">
-        <RouterLink class="nav-link active" aria-current="page" to="/sponsorView/viewCampaign">Campaigns</RouterLink>
-      </div>
-      <div v-else>
-        <RouterLink class="nav-link active" aria-current="page" to="/influencerView/CampaignsPublic">Public campaigns</RouterLink>
+    <table class="table  table-striped-columns  ">
+      <thead>
+        <tr>
+          <th scope="col" class="table-light">AD Info</th>
+          <th scope="col" class="table-light">
 
+              <div v-if="store.getters.getRoles == 'sponsor'">
+                <button type="button" @click='router.push({ name: "sponsorDashboard" })'>Dashboard</button>
+              </div>
 
-
-      </div>
-
-        
-              </button></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="ad in getAdRequests" :key="ad.id">
-
-            <td class="table-warning">Ad Id : {{ ad.id }} <br>
-
-
-              campaign_id : {{ ad.campaign_id }} <br>
-              Ad name :{{ ad.name }}<br>
-              influencer_id : {{ ad.influencer_id }} <br>
-              requirements : {{ ad.requirements }} <br>
-              Ad Amount :{{ ad.amount }}<br>
-              Ad status : <button disabled class="btn btn-primary">{{ ad.status }}</button><br>
-              Req Created by : {{ ad.created_by }} <br>
-              Req sent to :{{ ad.sent_to }}
-              <br> <button @click="router.push(`/updateAdRequests/AdID/${ad.id}`)">Update</button> <button
-                @click="deleteAd(ad.id)">Delete</button>
-            </td>
-            <td>
-              <div class="card-body">
-                <h5 class="card-title">Negotiation</h5>
-                <br>
-
-                {{ ad.messages }}
-
+              <div v-else>
+             
+                <button @click='router.push({ name: "influencerDashboard" })'>Dashboard</button>
+              
 
               </div>
+
+
+            </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="ad in getAdRequests" :key="ad.id">
+
+          <td class="table-warning">Ad Id : {{ ad.id }} <br>
+
+
+            campaign_id : {{ ad.campaign_id }} <br>
+            Ad name :{{ ad.name }}<br>
+            influencer_id : {{ ad.influencer_id }} <br>
+            requirements : {{ ad.requirements }} <br>
+            Ad Amount :{{ ad.amount }}<br>
+            Ad status : <button disabled class="btn btn-primary">{{ ad.status }}</button><br>
+            Req Created by : {{ ad.created_by }} <br>
+            Req sent to :{{ ad.sent_to }}
+            <br> <button @click="router.push(`/updateAdRequests/AdID/${ad.id}`)">Update</button> <button
+              @click="deleteAd(ad.id)">Delete</button>
+          </td>
+          <td>
+            <div class="card-body">
+              <h5 class="card-title">Negotiation</h5>
               <br>
-              <form @submit.prevent="sendMessage(ad.id)">
-                <div class="row mb-3">
-                  <label for="campaignName" class="col-sm-2 col-form-label">Write Message</label>
-                  <div class="col-sm-10">
-                    <input type="text" v-model="message" class="form-control" id="campaignName"
-                      placeholder="Type message here"><br> <button type="submit" class="btn btn-primary"> Send </button>
-                  </div>
+
+              {{ ad.messages }}
+
+
+            </div>
+            <br>
+            <form @submit.prevent="sendMessage(ad.id)">
+              <div class="row mb-3">
+                <label for="campaignName" class="col-sm-2 col-form-label">Write Message</label>
+                <div class="col-sm-10">
+                  <input type="text" v-model="message" class="form-control" id="campaignName"
+                    placeholder="Type message here"><br> <button type="submit" class="btn btn-primary"> Send </button>
                 </div>
+              </div>
 
-              </form>
-
-
-            </td>
+            </form>
 
 
-          </tr>
-        </tbody>
-      </table>
+          </td>
 
-    </div>
 
-    <div v-else>
-      <div>
-     
-      <div v-if="store.getters.getRoles==='sponsor'">
-        <RouterLink class="nav-link active" aria-current="page" to="/sponsorView/dashboardSponsor">Dashboard</RouterLink>
+        </tr>
+      </tbody>
+    </table>
+
+  </div>
+
+  <div v-else>
+    <div>
+
+      <div v-if="store.getters.getRoles == 'sponsor'">
+        <button @click='router.push({ name: "sponsorDashboard" })'>Dashboard</button>
         Currently no ad requests for this campaign
       </div>
       <div v-else>
-        <RouterLink class="nav-link active" aria-current="page" to="/influencerView/dashboardInfluencer">Dashboard ef</RouterLink>
+        <button @click='router.push({ name: "influencerDashboard" })'>Dashboard</button>
 
-Currently no ad requests for this campaign
+        Currently no ad requests for this campaign
 
 
       </div>
 
     </div>
-    </div>
+  </div>
 
 </template>
 <script>
@@ -112,8 +113,8 @@ export default {
   methods: {
 
     getAds() {
-      console.log("Fetched step")
-      console.log(this.id)
+
+
       const campId = this.id;
       fetch(import.meta.env.VITE_BASEURL + `/viewAdRequests/campaign_id/${campId}`,
         {
@@ -127,7 +128,7 @@ export default {
         }).then((x => {
           return x.json()
         })).then(data => {
-          console.log("Fetched ads:", data);
+
 
           this.getAdRequests = data;
 
@@ -142,10 +143,10 @@ export default {
           }
         }).then(x => {
           if (this.$store.getters.getRoles == 'influencer') {
-                            router.push({ "name": "CampaignsPublic" })
-        }else{
+            router.push({ "name": "CampaignsPublic" })
+          } else {
             router.push({ "name": "ViewCampaign" })
-        }
+          }
         })
     },
     sendMessage(id) {
@@ -163,10 +164,10 @@ export default {
 
         x => {
           if (this.$store.getters.getRoles == 'influencer') {
-                            router.push({ "name": "CampaignsPublic" })
-        }else{
+            router.push({ "name": "CampaignsPublic" })
+          } else {
             router.push({ "name": "ViewCampaign" })
-        }
+          }
         }
       )
 
@@ -175,7 +176,7 @@ export default {
 
   },
   mounted() {
-    console.log("mounted")
+   
     this.getAds();
   }
 
@@ -190,6 +191,6 @@ export default {
   overflow-y: auto;
   padding: 10px;
   background-color: grey;
-  /* Optional: background color */
+ 
 }
 </style>

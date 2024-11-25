@@ -1,7 +1,7 @@
-from flask import Blueprint, request , redirect, url_for ,jsonify , send_file
+from flask import Blueprint, request , redirect, url_for ,jsonify , send_file ,session
 from flask import current_app as app
 from werkzeug.security import check_password_hash, generate_password_hash 
-from flask_security import Security, login_user , roles_required ,auth_required ,roles_accepted ,login_required,current_user
+from flask_security import Security, login_user , roles_required ,auth_required ,roles_accepted ,login_required,current_user , logout_user
 from .models import Influencer, Sponsor, User, db,   Role,Campaign,AdRequest
 from flask_cors import cross_origin
 from .worker import export_csv
@@ -42,7 +42,12 @@ def login():
     return {"token": user.get_auth_token(),
             "roles": user.get_roles()}
             
-
+@api.route('/logout')
+@login_required
+def logout():
+    logout_user()  
+    session.clear()
+    return {"message": "Logged out successfully"}, 200
 
 @api.route("/influencerRegister" , methods=['POST'])
 @cross_origin(origin='http://localhost:5173')
@@ -95,7 +100,7 @@ def sponsor_register():
     
     user=app.security.datastore.find_user(username=username) 
     if user:
-        return {"message" : "User already exists"} ,404
+        return {"message" : "User already exists"} ,409
         
 
     if not username:
@@ -114,7 +119,7 @@ def sponsor_register():
     
     app.security.datastore.add_role_to_user(user , user_role)
     
-    sponsor = Sponsor(id=user.id, industry=industry)
+    sponsor = Sponsor(id=user.id, industry=industry , name=username)
     db.session.add(sponsor)
     
     db.session.commit()
@@ -187,7 +192,7 @@ def createCampaign():
 
    
     if campaign:
-        return {"message" : "Enter new campaign name "} , 404
+        return {"message" : "Enter new campaign name as already exists"} , 409
 
     campaign=Campaign(campaignName=campaignName,budget=budget  , visibility=visibility ,niche=niche , goals=goals ,sponsor_id=sponsor_id)
    
@@ -285,7 +290,7 @@ def publicCampaigns():
 @roles_accepted("admin")
 def adminDashboard():
     result={}
-    sponsors=db.session.query(Sponsor).filter_by(approved=False).all()
+    sponsors=db.session.query(Sponsor).all()
     sponsors_to_approve=[]
     for i in sponsors:
         sponsors_to_approve.append({
@@ -356,6 +361,9 @@ def createAdrequest():
         campaign_id=request.json.get('campaign_id')
         created_by=current_user.id
         sent_to=influencer_id
+
+        if not (ad_name or amount or requirements or influencer_id or campaign_id or  created_by or sent_to ) :
+            return  {"message":"Info is missing" }, 400
         
 
         is_created=db.session.query(AdRequest).filter_by(created_by=created_by ,sent_to=sent_to,campaign_id=campaign_id ).first()
@@ -430,7 +438,7 @@ def getAdRequest(id):
                                     "status":sent.status ,"created_by":sent.created_by,"sent_to":sent.sent_to
                     })
             return sentAds ,  200
-        # result={"sentAds":sentAds,"receivedAds":receivedAds}    
+       
         return [], 404
       
         
@@ -500,6 +508,8 @@ def get_updateCampaign(id):
                                   "budget":camp.budget ,"niche":camp.niche,
                                   "goals":camp.goals}, 200
     camp=db.session.query(Campaign).filter_by(id=id).first()
+    if not camp:
+        return  {"message":"campaign not exists"} , 404
     goals=request.json.get('goals')
     budget=request.json.get('budget')
     if not (goals or budget):
@@ -567,12 +577,12 @@ def allAds():
         if not all:
             return {"Message":"No ads for admin dashboard"} , 404
         for req in all:
-            allAds.append({"id":req.id , "campaign_id":req.id , "name":req.name ,
+            allAds.append({"id":req.id , "campaign_id":req.campaign_id,"name":req.name ,
                                     "influencer_id":req.influencer_id , "messages":req.messages ,
                                     "requirements":req.requirements,"amount":req.amount,
                                     "status":req.status ,"created_by":req.created_by,"sent_to":req.sent_to
                     })
-            return  allAds , 200
+        return  allAds , 200
         
         
     return {"message":" there is some problem "} , 404

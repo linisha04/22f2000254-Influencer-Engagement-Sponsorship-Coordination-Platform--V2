@@ -117,10 +117,6 @@ import store from '@/store';
                 valid=false;
                 alert("Please enter the industry.");
             }
-            // if (!this.password.length>3 ){
-            //     valid=false;
-            //     alert("Please enter the correct password length.");
-            // }
             if (!this.email){
                 valid=false;
                 alert("Please enter the email");
@@ -128,10 +124,7 @@ import store from '@/store';
             if(!this.password){
                 valid=false;
                 alert("Please enter the passord and length should be greater than 4")
-            }
-            
-
-            
+            }        
             console.log(this.username , this.password , this.email , this.industry)
 
             return valid
@@ -154,11 +147,9 @@ import store from '@/store';
                     }else if(x[1] == 404 ){
                         alert(" username exists")
                     }
-                    console.log(this.username , this.password )
                     return {}
                 }).then(
                     x =>{
-                        console.log(this.username , this.password , this.email , this.industry)
                         if (x["message"]=="Check Username"){
                             alert("Check Username");
                         }else if(x["message"]=="Check password"){

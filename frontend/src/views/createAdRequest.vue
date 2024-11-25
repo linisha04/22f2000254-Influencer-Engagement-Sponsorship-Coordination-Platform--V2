@@ -11,7 +11,7 @@ import NavSponsor from '@/components/Sponsor/NavSponsor.vue';
 <template>
 
     <div v-if="role == 'sponsor'">
-        <h1>this is sponsor</h1>
+
         <div class="container mt-5 ">
             <div class="card mx-auto" style="width: 70rem;">
                 <div class="card-body ">
@@ -53,8 +53,10 @@ import NavSponsor from '@/components/Sponsor/NavSponsor.vue';
                                         <td class="table-warning">{{ inf.followers }}</td>
                                         <td class="table-warning">{{ inf.earnings }}</td>
                                         <td class="table-warning">{{ inf.bio }}</td>
-                                        <td class="table-warning"><button type="button" @click="select(inf.id)">Select</button></td>
-                                     
+                                        <td class="table-warning"><button type="button"
+                                                :disabled="influencer_id === inf.id" @click="select(inf.id)">
+                                                {{ influencer_id === inf.id ? 'Selected' : 'Select' }}</button></td>
+
 
                                     </tr>
                                 </tbody>
@@ -116,6 +118,7 @@ export default {
     data() {
         return {
 
+
             influencers: null,
             name: null,
             amount: null,
@@ -154,70 +157,63 @@ export default {
                 valid = false
                 alert("Please fill the AdRequest name")
             }
-            if (!this.amount) {
+            if (!this.amount || this.amount<0) {
                 valid = false
-                alert("Please fill the AdRequest amount")
+                alert("Please fill the AdRequest amount and should be greater than zero")
             }
             if (!this.requirements) {
                 valid = false
                 alert("Please fill the AdRequest requirements")
             }
-            if(store.getters.getRoles=='sponsor'){
+            if (store.getters.getRoles == 'sponsor') {
                 if (!this.influencer_id) {
-                valid = false
-                alert("Please Choose the influencer_id ")
+                    valid = false
+                    alert("Please Choose the influencer_id ")
+                }
             }
-            }
-            // if (!this.influencer_id) {
-            //     valid = false
-            //     alert("Please Choose the influencer_id ")
-            // }
+
             return valid
         }
         ,
         createAdRequest() {
-            console.log("prop info", this.id)
-            console.log(this.name, this.amount, this.requirements, this.influencer_id, this.id
-            )
-
-                if (!this.validate()) {
-                    return
-                }
-                fetch(import.meta.env.VITE_BASEURL + "/createAdrequest", {
-                    method: 'POST',
-                    headers: {
-                        "Content-Type": "application/json",
-                        'Authentication-Token': store.getters.getToken
-                    },
-                    body: JSON.stringify({
-                        name: this.name, amount: this.amount, requirements: this.requirements, influencer_id: this.influencer_id, campaign_id: this.id
-                    })
-                }).then(x => {
-                    if (x.status == 201) {
-
-                        if (this.$store.getters.getRoles == 'influencer') {
-                            router.push({ "name": "CampaignsPublic" })
-        }else{
-            router.push({ "name": "ViewAdRequests" })
-        }
-                        
-                        
-                    }
-                    if (x.status == 409) {
-                        alert("Req already exists for this campaign")
-
-                        if (this.$store.getters.getRoles == 'influencer') {
-                            router.push({ "name": "CampaignsPublic" })
-        }else{
-            router.push({ "name": "ViewAdRequests" })
-        }
-
-                        
-                    }
+            if (!this.validate()) {
+                return
+            }
+            fetch(import.meta.env.VITE_BASEURL + "/createAdrequest", {
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json",
+                    'Authentication-Token': store.getters.getToken
+                },
+                body: JSON.stringify({
+                    name: this.name, amount: this.amount, requirements: this.requirements, influencer_id: this.influencer_id, campaign_id: this.id
                 })
-            } 
+            }).then(x => {
+                if (x.status == 201) {
 
-             
+                    if (store.getters.getRoles == 'influencer') {
+                        router.push({ "name": "CampaignsPublic" })
+                    } else {
+                        router.push({ "name": "ViewAdRequests" })
+                    }
+
+
+                }
+                if (x.status == 409) {
+                    alert("Req already exists for this campaign")
+
+                    if (this.$store.getters.getRoles == 'influencer') {
+                        router.push({ "name": "CampaignsPublic" })
+                    } else {
+                        router.push({ "name": "ViewAdRequests" })
+                    }
+
+
+                }
+            })
+        }
+
+
     },
     mounted() {
         if (this.$store.getters.getRoles == 'sponsor') {

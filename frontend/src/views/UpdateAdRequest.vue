@@ -8,7 +8,7 @@ import { RouterView } from "vue-router";
 <template>
     <br>
     <br>
-    <h1>page</h1>
+    <h1>Update Adrequest</h1>
     <div class="container mt-5" v-if="adInfo.created_by===adInfo.current_user_id">
         <div class="card mx-auto" style="width: 45rem;">
             <div class="card-body">

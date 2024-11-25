@@ -7,112 +7,134 @@ import router from '@/router';
 </script>
 
 <template>
-<nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top">
-    <div class="container-fluid">
-        <a class="navbar-brand">SponsorDashboard</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                <li class="nav-item">
-                    <RouterLink class="nav-link active" aria-current="page" to="/sponsorView/dashboardSponsor">Home</RouterLink>
-                </li>
+    <nav class="navbar navbar-expand-lg  fixed-top" style="background-color: brown;">
+        <div class="container-fluid">
+            <a class="navbar-brand">SponsorDashboard</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <RouterLink class="nav-link active" aria-current="page" to="/sponsorView/dashboardSponsor">Home
+                        </RouterLink>
+                    </li>
 
-                <li class="nav-item">
-                    <RouterLink class="nav-link active" to="/sponsorView/createCampaign">Create Campaign</RouterLink>
+                    <li class="nav-item">
+                        <RouterLink class="nav-link active" to="/sponsorView/createCampaign">Create Campaign
+                        </RouterLink>
 
-                </li>
-                <li class="nav-item">
-                    <button class="nav-link active"  @click="do_export()">Export</button>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link active" @click="do_export()">Export</button>
 
-                </li>
-                <li class="nav-item">
-                    <RouterLink class="nav-link active" to="/sponsorView/viewCampaign">View Campaign</RouterLink>
-                </li>
-                <li class="nav-item">
-                    <RouterLink class="nav-link active" to="/"> Logout</RouterLink>
-                </li>
-            </ul>
-            <form class="d-flex" role="search" @submit.prevent="search">
+                    </li>
+                    <li class="nav-item">
+                        <RouterLink class="nav-link active" to="/sponsorView/viewCampaign">View Campaign</RouterLink>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link active" @click="logout"> Logout</button>
+                    </li>
+                </ul>
+                <form class="d-flex" role="search" @submit.prevent="search">
 
-                <input class="form-control me-2" type="search" placeholder="Search Influencers" aria-label="Search" v-model="keyword">
+                    <input class="form-control me-2" type="search" placeholder="Search Influencers" aria-label="Search"
+                        v-model="keyword">
 
-                <button class="btn btn-outline-success" type="submit">Search</button>
+                    <button class="btn btn-outline-success" type="submit">Search</button>
 
-            </form>
+                </form>
 
+            </div>
         </div>
-    </div>
-</nav>
+    </nav>
 </template>
 
 <script>
 
 export default {
-    data(){
-        return{
-            keyword:null,
-            export_id:null
+    data() {
+        return {
+            keyword: null,
+            export_id: null
         }
     }
-    , 
-    methods:{
-        search(){
-            if(this.keyword){
-                router.push(`/search/keyword/${this.keyword}`)
-            }
-        },
-        do_export(){
-            fetch(import.meta.env.VITE_BASEURL+"/export",
-            {
-                method: 'GET',
+    ,
+    methods: {
+        logout() {
+            fetch(import.meta.env.VITE_BASEURL + "/logout", {
+                method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    "Authentication-Token": store.getters.getToken
-
-                },
-
-            }
-            ).then(
-                x=>{return x.json()
-
+                    'Authentication-Token': store.getters.getToken
                 }
-            ).then(
-              
-                x=>{
-                    this.export_id=x["id"] 
-                    setTimeout(()=> 
-                this.export_status(this.export_id) , 2000)
-                 console.log(x["id"])
+            }).then(
+
+                x => {
+                    store.dispatch('logout')
+                    router.push('/signin')
                 }
             )
         },
-        export_status(id){
-            fetch(import.meta.env.VITE_BASEURL+"/export/"+id+"/status",
-            {
-                method: 'GET',
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authentication-Token": store.getters.getToken
-
-                },
-
+        search() {
+            if (this.keyword) {
+                router.push(`/search/keyword/${this.keyword}`)
             }
-                
-            ).then(
-                x=>{return x.json()
+        },
+        do_export() {
+            fetch(import.meta.env.VITE_BASEURL + "/export",
+                {
+                    method: 'GET',
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authentication-Token": store.getters.getToken
+
+                    },
 
                 }
             ).then(
-              
-                x=>{
-                if(x["status"]=="SUCCESS"){
-                  open(import.meta.env.VITE_BASEURL+`/export/${id}`)
-                }else{
-                    setTimeout(()=>this.export_status(this.export_id) ,2000)
+                x => {
+                    return x.json()
+
                 }
-                
+            ).then(
+
+                x => {
+                    this.export_id = x["id"]
+                    setTimeout(() =>
+                        this.export_status(this.export_id), 2000)
+                    console.log(x["id"])
+                }
+            )
+        },
+        export_status(id) {
+            fetch(import.meta.env.VITE_BASEURL + "/export/" + id + "/status",
+                {
+                    method: 'GET',
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authentication-Token": store.getters.getToken
+
+                    },
+
+                }
+
+            ).then(
+                x => {
+                    return x.json()
+
+                }
+            ).then(
+
+                x => {
+                    if (x["status"] == "SUCCESS") {
+                        open(import.meta.env.VITE_BASEURL + `/export/${id}`)
+                    } else {
+                        setTimeout(() => this.export_status(this.export_id), 2000)
+                    }
+
                 }
             )
 

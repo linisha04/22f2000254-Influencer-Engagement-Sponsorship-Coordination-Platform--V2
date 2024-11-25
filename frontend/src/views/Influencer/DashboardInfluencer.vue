@@ -24,7 +24,7 @@ import store from '@/store';
     <li class="list-group-item"><b>Your Email : </b>    {{ userInfo.email}}                      </li>
     <li class="list-group-item"><b>Earnings : </b>   {{ userInfo.earnings }}                  </li>
     <li class="list-group-item"><b>Niche : </b>          {{ userInfo.niche }}                        </li>
-    <li class="list-group-item"><b>Your Budget : </b>            {{ userInfo.bio }}                   </li>
+    <li class="list-group-item"><b>Your Bio : </b>            {{ userInfo.bio }}                   </li>
     <li class="list-group-item"><b>Your Budget : </b>            {{ userInfo.followers }}                   </li>
   </ul>
 </div>

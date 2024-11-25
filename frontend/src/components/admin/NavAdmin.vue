@@ -3,7 +3,7 @@ import { RouterLink } from 'vue-router'
 </script>
 
 <template>
-    <nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top">
+    <nav class="navbar navbar-expand-lg fixed-top" style="background-color:brown;">
         <div class="container-fluid">
             <a class="navbar-brand" >Admin Dashboard</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"

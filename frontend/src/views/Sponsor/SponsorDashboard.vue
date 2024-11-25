@@ -2,10 +2,7 @@
 import NavSponsor from '@/components/Sponsor/NavSponsor.vue';
 import { RouterView } from "vue-router";
 import { ref } from 'vue';
-
-// import CreateCampaign from './CreateCampaign.vue';
 import router from '@/router';
-import { RouterLink } from 'vue-router';
 import store from '@/store';
 import { onMounted } from 'vue';
 </script>
