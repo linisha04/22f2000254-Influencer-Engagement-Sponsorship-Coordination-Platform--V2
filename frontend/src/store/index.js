@@ -17,7 +17,7 @@ export default createStore({
         setUser(state, value){
             localStorage.setItem("user", JSON.stringify(value));
             state.user = value ;
-            // || { token: null, roles: [] }
+           
         },
         clearUser(state) {
             state.user = { token: null, roles: [] };

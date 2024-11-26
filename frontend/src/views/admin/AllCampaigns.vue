@@ -7,10 +7,10 @@ import { RouterView } from "vue-router";
 <template>
 
 
-<br>
-<br>
+  <br>
+  <br>
 
-<table class="table  table-striped-columns  ">
+  <table class="table  table-striped-columns  ">
     <thead>
       <tr>
         <th scope="col" class="table-light"> Campaign Id</th>
@@ -21,16 +21,16 @@ import { RouterView } from "vue-router";
         <th scope="col" class="table-light">Budget In Rupees</th>
         <th scope="col" class="table-light">Niche</th>
         <th scope="col" class="table-light">Goals</th>
-          <th scope="col" class="table-light">
-       
-        
+        <th scope="col" class="table-light">
 
-         </th>
+
+
+        </th>
       </tr>
     </thead>
     <tbody>
       <tr v-for="camp in allCampaigns" :key="camp.id">
-       
+
         <td class="table-warning">{{ camp['id'] }}</td>
         <td class="table-warning">{{ camp['sponsorName'] }}</td>
 
@@ -39,7 +39,7 @@ import { RouterView } from "vue-router";
         <td class="table-warning">{{ camp['budget'] }}</td>
         <td class="table-warning">{{ camp['niche'] }}</td>
         <td class="table-warning">{{ camp['goals'] }}</td>
-           
+
 
       </tr>
     </tbody>
@@ -51,36 +51,36 @@ import { RouterView } from "vue-router";
 <script>
 export default {
 
-    data(){
-        return{
-            allCampaigns:[]
-        }
-    },
-    methods:{
-       
+  data() {
+    return {
+      allCampaigns: []
+    }
+  },
+  methods: {
 
-        getAllCamps(){
-            fetch(import.meta.env.VITE_BASEURL+"/viewCampaign",{
-                method:'GET',
-                headers:{
-                    "Content-Type": "application/json",
-                    "Authentication-Token": store.getters.getToken
 
-                },
+    getAllCamps() {
+      fetch(import.meta.env.VITE_BASEURL + "/viewCampaign", {
+        method: 'GET',
+        headers: {
+          "Content-Type": "application/json",
+          "Authentication-Token": store.getters.getToken
 
-            }).then((x=>{
-                return x.json()
-            })) .then(data => {
-               
+        },
+
+      }).then((x => {
+        return x.json()
+      })).then(data => {
+
         this.allCampaigns = data;
-       
-      })
-        }
-    },
-    mounted() {
 
-this.getAllCamps();
-}
+      })
+    }
+  },
+  mounted() {
+
+    this.getAllCamps();
+  }
 
 }
 

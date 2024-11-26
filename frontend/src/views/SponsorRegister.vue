@@ -7,10 +7,10 @@ import store from '@/store';
 </script>
 
 <template>
-<Navbar /> 
+    <Navbar />
 
 
-<div class="container mt-5">
+    <div class="container mt-5">
         <div class="card mx-auto" style="width: 45rem;">
             <div class="card-body">
                 <h5 class="card-title">Sponsor Register</h5>
@@ -24,7 +24,7 @@ import store from '@/store';
                     <div class="row mb-3">
                         <label for="email" class="col-sm-2 col-form-label">Email</label>
                         <div class="col-sm-10">
-                            <input type="email" class="form-control" id="email" v-model="email"> 
+                            <input type="email" class="form-control" id="email" v-model="email">
                         </div>
                     </div>
                     <div class="row mb-3">
@@ -37,8 +37,8 @@ import store from '@/store';
                         <legend class="col-form-label col-sm-2 pt-0">Industry</legend>
                         <div class="col-sm-10">
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="industry" id="Fashion&Beauty&Lifestyle"
-                                    value="Fashion&Beauty&Lifestyle" v-model="industry">
+                                <input class="form-check-input" type="radio" name="industry"
+                                    id="Fashion&Beauty&Lifestyle" value="Fashion&Beauty&Lifestyle" v-model="industry">
                                 <label class="form-check-label" for="Fashion&Beauty&Lifestyle">
                                     Fashion & Beauty & Lifestyle
                                 </label>
@@ -95,77 +95,78 @@ import store from '@/store';
 
 
 <script>
-    export default {
-        data(){
+export default {
+    data() {
         return {
-            username:null,
-            password:null,
-            email:null,
-            industry:null
+            username: null,
+            password: null,
+            email: null,
+            industry: null
         }
     },
-    methods:{
-        validate(){
+    methods: {
+        validate() {
 
-            let valid=true;
-            if (!this.username ){
-                valid=false;
+            let valid = true;
+            if (!this.username) {
+                valid = false;
                 alert("Please enter valid username or length must be greater than 4.");
-               
+
             }
-            if (!this.industry){
-                valid=false;
+            if (!this.industry) {
+                valid = false;
                 alert("Please enter the industry.");
             }
-            if (!this.email){
-                valid=false;
+            if (!this.email) {
+                valid = false;
                 alert("Please enter the email");
             }
-            if(!this.password){
-                valid=false;
+            if (!this.password) {
+                valid = false;
                 alert("Please enter the passord and length should be greater than 4")
-            }        
-            console.log(this.username , this.password , this.email , this.industry)
+            }
+            console.log(this.username, this.password, this.email, this.industry)
 
             return valid
 
 
         },
-        sponsorRegister(){
-            if(!this.validate()){
+        sponsorRegister() {
+            if (!this.validate()) {
                 return;
             }
 
-            fetch(import.meta.env.VITE_BASEURL+"/sponsorRegister"  ,
-                 {method : "POST" , headers:{"Content-Type" : "application/json"},
-                 body: JSON.stringify({username: this.username, password: this.password , email:this.email , industry: this.industry})
+            fetch(import.meta.env.VITE_BASEURL + "/sponsorRegister",
+                {
+                    method: "POST", headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ username: this.username, password: this.password, email: this.email, industry: this.industry })
                 }).then(resp => {
-                    return [resp.json() , resp.status]
-                }).then(x=>{
-                    if(x[1] == 200){
+                    return [resp.json(), resp.status]
+                }).then(x => {
+                    if (x[1] == 200) {
                         return x[0]
-                    }else if(x[1] == 404 ){
+                    } else if (x[1] == 404) {
                         alert(" username exists")
                     }
                     return {}
                 }).then(
-                    x =>{
-                        if (x["message"]=="Check Username"){
+                    x => {
+                        if (x["message"] == "Check Username") {
                             alert("Check Username");
-                        }else if(x["message"]=="Check password"){
+                        } else if (x["message"] == "Check password") {
                             alert("Check password");
-                        }else if(x["message"]=="Check email"){
+                        } else if (x["message"] == "Check email") {
                             alert("Check email");
-                        }else if(x["message"]=="Check industry"){
+                        } else if (x["message"] == "Check industry") {
                             alert("Check industry");
-                        }else{
-                            router.push({name:"signin"})
+                        } else {
+                            router.push({ name: "signin" })
                         }
                     })
-            
+
         }
     }
-       
-    }
+
+}
 </script>
 <style scoped></style>

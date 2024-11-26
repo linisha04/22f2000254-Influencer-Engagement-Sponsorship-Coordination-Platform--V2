@@ -12,19 +12,19 @@ import NavSponsor from '@/components/Sponsor/NavSponsor.vue';</script>
           <th scope="col" class="table-light">AD Info</th>
           <th scope="col" class="table-light">
 
-              <div v-if="store.getters.getRoles == 'sponsor'">
-                <button type="button" @click='router.push({ name: "sponsorDashboard" })'>Dashboard</button>
-              </div>
+            <div v-if="store.getters.getRoles == 'sponsor'">
+              <button type="button" @click='router.push({ name: "sponsorDashboard" })'>Dashboard</button>
+            </div>
 
-              <div v-else>
-             
-                <button @click='router.push({ name: "influencerDashboard" })'>Dashboard</button>
-              
+            <div v-else>
 
-              </div>
+              <button @click='router.push({ name: "influencerDashboard" })'>Dashboard</button>
 
 
-            </th>
+            </div>
+
+
+          </th>
         </tr>
       </thead>
       <tbody>
@@ -176,7 +176,7 @@ export default {
 
   },
   mounted() {
-   
+
     this.getAds();
   }
 
@@ -191,6 +191,6 @@ export default {
   overflow-y: auto;
   padding: 10px;
   background-color: grey;
- 
+
 }
 </style>

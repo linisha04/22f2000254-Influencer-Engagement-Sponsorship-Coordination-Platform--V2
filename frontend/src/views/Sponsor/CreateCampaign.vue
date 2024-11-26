@@ -135,20 +135,20 @@ export default {
         validate() {
 
             let valid = true;
-            if (!this.campaignName || !this.campaignName  || !this.niche || !this.goals) {
+            if (!this.campaignName || !this.campaignName || !this.niche || !this.goals) {
                 valid = false;
                 alert("Please enter valid form details");
             }
-            if ( this.budget <0|| !this.budget){
+            if (this.budget < 0 || !this.budget) {
                 valid = false;
                 alert("Budget cant be less than zero");
 
             }
 
 
-            
+
             const token = this.$store.getters.getToken;
-        
+
             return valid
 
 

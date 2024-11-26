@@ -9,7 +9,7 @@ import { RouterView } from "vue-router";
     <br>
     <br>
     <h1>Update Adrequest</h1>
-    <div class="container mt-5" v-if="adInfo.created_by===adInfo.current_user_id">
+    <div class="container mt-5" v-if="adInfo.created_by === adInfo.current_user_id">
         <div class="card mx-auto" style="width: 45rem;">
             <div class="card-body">
                 <h5 class="card-title">Update AD</h5>
@@ -32,7 +32,8 @@ import { RouterView } from "vue-router";
                     <div class="row mb-3">
                         <label for="goals" class="col-sm-2 col-form-label">requirements</label>
                         <div class="col-sm-10">
-                            <textarea v-model="adInfo.requirements" id="goals" placeholder="Enter your requirements here..."></textarea>
+                            <textarea v-model="adInfo.requirements" id="goals"
+                                placeholder="Enter your requirements here..."></textarea>
                         </div>
                     </div>
 
@@ -66,7 +67,8 @@ import { RouterView } from "vue-router";
                     <div class="row mb-3">
                         <label for="goals" class="col-sm-2 col-form-label">requirements</label>
                         <div class="col-sm-10">
-                            <textarea v-model="adInfo.requirements" id="goals" disabled placeholder="Enter your requirements here..."></textarea>
+                            <textarea v-model="adInfo.requirements" id="goals" disabled
+                                placeholder="Enter your requirements here..."></textarea>
                         </div>
                     </div>
 
@@ -75,8 +77,8 @@ import { RouterView } from "vue-router";
                         <legend class="col-form-label col-sm-2 pt-0">status</legend>
                         <div class="col-sm-10">
                             <div class="form-check">
-                                <input class="form-check-input" type="radio" name="status" id="pending"
-                                    value="pending" v-model="adInfo.status">
+                                <input class="form-check-input" type="radio" name="status" id="pending" value="pending"
+                                    v-model="adInfo.status">
                                 <label class="form-check-label" for="pending">
                                     Pending
                                 </label>
@@ -118,94 +120,96 @@ import { RouterView } from "vue-router";
 <script>
 
 export default {
-    props:{id:{required: true }},
-    data(){
+    props: { id: { required: true } },
+    data() {
         return {
-            adInfo:{
-                 name:'',
-                 amount:'',
-                 requirements:'',
-                 created_by:'',
-                 sent_to:'',
-                 status:'',
-                 messages:'',
-                 influencer_id:'',
-                 campaign_id:'',
-                 id:this.id,
-                 current_user_id:''
+            adInfo: {
+                name: '',
+                amount: '',
+                requirements: '',
+                created_by: '',
+                sent_to: '',
+                status: '',
+                messages: '',
+                influencer_id: '',
+                campaign_id: '',
+                id: this.id,
+                current_user_id: ''
             }
         }
     },
-    methods:{
+    methods: {
         getAdInfo() {
-        console.log(this.id)
-        fetch(import.meta.env.VITE_BASEURL + `/get_update_delete_Ad/${this.id}`, {
-          method: 'GET',
-          headers: {
-            "Content-Type": "application/json",
-            "Authentication-Token": store.getters.getToken
-  
-          },
-  
-        }).then((x => {
-          return x.json()
-        })).then(data => {
-          console.log("Fetched adInfo:", data);
-  
-          this.adInfo = data;
-  
-        })
-      },
-      updateAd() {
-            
-            fetch(import.meta.env.VITE_BASEURL +`/get_update_delete_Ad/${this.id}`, {
+            console.log(this.id)
+            fetch(import.meta.env.VITE_BASEURL + `/get_update_delete_Ad/${this.id}`, {
+                method: 'GET',
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authentication-Token": store.getters.getToken
+
+                },
+
+            }).then((x => {
+                return x.json()
+            })).then(data => {
+                console.log("Fetched adInfo:", data);
+
+                this.adInfo = data;
+
+            })
+        },
+        updateAd() {
+
+            fetch(import.meta.env.VITE_BASEURL + `/get_update_delete_Ad/${this.id}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
                     'Authentication-Token': store.getters.getToken
                 },
-                body: JSON.stringify({amount: this.adInfo.amount  , requirements: this.adInfo.requirements
+                body: JSON.stringify({
+                    amount: this.adInfo.amount, requirements: this.adInfo.requirements
                 })
             }).then(
 
                 x => {
                     if (this.$store.getters.getRoles == 'influencer') {
-                            router.push({ "name": "CampaignsPublic" })
-        }else{
-            router.push({ "name": "ViewCampaign" })
-        }
+                        router.push({ "name": "CampaignsPublic" })
+                    } else {
+                        router.push({ "name": "ViewCampaign" })
+                    }
                 }
             )
-        
 
-    },
-    updatedStatus(){
 
-        fetch(import.meta.env.VITE_BASEURL +`/get_update_delete_Ad/${this.id}`, {
+        },
+        updatedStatus() {
+
+            fetch(import.meta.env.VITE_BASEURL + `/get_update_delete_Ad/${this.id}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
                     'Authentication-Token': store.getters.getToken
                 },
-                body: JSON.stringify({status: this.adInfo.status
+                body: JSON.stringify({
+                    status: this.adInfo.status
                 })
             }).then(
 
                 x => {
                     if (this.$store.getters.getRoles == 'influencer') {
-                            router.push({ "name": "CampaignsPublic" })
-        }else{
-            router.push({ "name": "ViewCampaign" })
-        }
+                        router.push({ "name": "CampaignsPublic" })
+                    } else {
+                        router.push({ "name": "ViewCampaign" })
+                    }
                 }
             )
 
-    }
+        }
 
 
 
     },
-    mounted(){
+    mounted() {
         this.getAdInfo();
     }
 }

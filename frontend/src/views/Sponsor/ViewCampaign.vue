@@ -23,8 +23,9 @@ import { RouterView } from "vue-router";
         <th scope="col" class="table-light">Update</th>
         <th scope="col" class="table-light">Delete</th>
         <th scope="col" class="table-light">View Ad Requests</th>
-        <th scope="col" class="table-light">Create Ad Requests  <button @click='router.push({ name: "sponsorDashboard" })'>Dashboard</button></th>
-       
+        <th scope="col" class="table-light">Create Ad Requests <button
+            @click='router.push({ name: "sponsorDashboard" })'>Dashboard</button></th>
+
       </tr>
     </thead>
     <tbody>

@@ -36,7 +36,7 @@ import { RouterView } from "vue-router";
             </div>
           </div>
 
-          <button type="submit" class="btn btn-primary"> Update  </button>
+          <button type="submit" class="btn btn-primary"> Update </button>
         </form>
 
 
@@ -73,7 +73,7 @@ export default {
     }
   },
   methods: {
-  
+
     campInfo() {
       console.log(this.id)
       fetch(import.meta.env.VITE_BASEURL + `/updateCampaign/${this.id}`, {
@@ -94,7 +94,7 @@ export default {
       })
     },
     updateCampaign() {
-          fetch(import.meta.env.VITE_BASEURL + `/updateCampaign/${this.id}`, {
+      fetch(import.meta.env.VITE_BASEURL + `/updateCampaign/${this.id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -109,7 +109,7 @@ export default {
           return router.push({ name: "ViewCampaign" })
         }
       )
-     
+
 
     }
 

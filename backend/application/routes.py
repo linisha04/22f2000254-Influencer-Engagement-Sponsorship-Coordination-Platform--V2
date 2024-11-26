@@ -641,8 +641,6 @@ def export():
 @api.route("/export/<string:id>/status")
 def export_status(id):
     result=AsyncResult(id)
-    print(result.get())
-   
     return  {"status": result.status}
 
 
