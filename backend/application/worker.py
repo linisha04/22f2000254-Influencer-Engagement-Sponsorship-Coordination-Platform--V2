@@ -60,7 +60,7 @@ def monthlyReport():
                      "id":camp.id,
                      "campaignName":camp.campaignName,
                      "visibility":camp.visibility,
-                     "visibility":camp.visibility,
+                     "budget":camp.budget,
                      "niche":camp.niche,
                      "goals":camp.goals})
                 html=MIMEText(content.render(user=user, campaigns=campaigns),'html')    
@@ -69,16 +69,20 @@ def monthlyReport():
                     
         
 @shared_task
-def export_csv(id):
+def export_csv():
     file=StringIO()
     writer=DictWriter(file , fieldnames=["campaignName","id","visibility","budget","niche","goals"])
     writer.writeheader()
-    for camp in  Campaign.query.filter_by(sponsor_id=id).all():
+    campaigns=Campaign.query.all()
+    if not campaigns:
+        print(f"No campaigns found for sponsor_id ")
+       
+    for camp in campaigns:
         writer.writerow({
             "campaignName":camp.campaignName,
             "id":camp.id,
             "visibility":camp.visibility,
-            "visibility":camp.visibility,
+            "budget":camp.budget,
             "niche":camp.niche,
             "goals":camp.goals})
     file.seek(0)

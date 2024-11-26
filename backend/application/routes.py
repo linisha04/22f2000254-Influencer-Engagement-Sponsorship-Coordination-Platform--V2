@@ -36,6 +36,8 @@ def login():
     
     if not user:
         return {"message": "User not found"}, 404
+    if not check_password_hash(user.password, password):
+        return {"message": "User not Found"}, 404
     login_user(user, remember=True)
     
      
@@ -633,8 +635,7 @@ def changeFlag(user_id):
 @auth_required("token")
 @roles_required("sponsor")
 def export():
-    user = db.session.query(User).filter_by(id=current_user.id).first()
-    task=export_csv.delay(user.id)
+    task=export_csv.delay()
     return jsonify({"id": task.id})
 
 @api.route("/export/<string:id>/status")

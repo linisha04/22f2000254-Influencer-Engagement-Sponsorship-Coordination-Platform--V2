@@ -82,7 +82,7 @@ import NavSponsor from '@/components/Sponsor/NavSponsor.vue';
     <div v-else>
         <br>
         <br>
-        <h1>tole is</h1>
+        <h1></h1>
         <h5 class="card-title ">Create Ad Request</h5>
         <form @submit.prevent="createAdRequest()">
             <div class="mb-3">

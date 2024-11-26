@@ -6,9 +6,9 @@ import router from "@/router";
 
 </script>
 <template>
+  
     <div class="container-xxl  ">
            
-   
    <table class="table  table-striped-columns fixed-top " >
        <thead>
        <tr class="table-info">

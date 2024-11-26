@@ -6,9 +6,8 @@ import router from "@/router";
 <br>
 <br>
 
-
-
-<div v-for="ad in allAdReq" :key="ad.id">
+<div v-if="allAdReq.length >1">
+    <div v-for="ad in allAdReq" :key="ad.id">
 <div class="card" style="width: 88rem;">
   <img src="/Users/linisha/Documents/MAD2/frontend/src/assets/Home Page.png" class="card-img-top" alt="..."  style="width: 200px; height: auto;">
                     Ad Id : {{ ad.id }} <br>
@@ -22,6 +21,26 @@ import router from "@/router";
                     <button disabled class="btn">  Negotiation : {{  ad.messages }}</button>
                  
                    <button disabled class="btn">  Ad status : {{  ad.status }}</button><br>
+                </div>
+
+</div>
+
+</div>
+
+<!-- <div v-for="ad in allAdReq" :key="ad.id">
+<div class="card" style="width: 88rem;">
+  <img src="/Users/linisha/Documents/MAD2/frontend/src/assets/Home Page.png" class="card-img-top" alt="..."  style="width: 200px; height: auto;">
+                    Ad Id : {{ ad.id }} <br>
+                    Ad name :{{ ad.name }} <br>
+                    campaign_id : {{ ad.campaign_id }} <br>
+                    influencer_id : {{ ad.influencer_id }} <br>
+                    requirements : {{ ad.requirements }} <br>
+                    Ad Amount :{{ ad.amount }}<br>
+                    Req Created by : {{ ad.created_by }} <br>
+                    Req sent to :{{ ad.sent_to }}
+                    <button disabled class="btn">  Negotiation : {{  ad.messages }}</button>
+                 
+                   <button disabled class="btn">  Ad status : {{  ad.status }}</button><br> -->
   <!-- <div class="card-body">
     <h5 class="card-title">  Ad name :{{ ad.name }}</h5>
     <p class="card-text">
@@ -47,9 +66,9 @@ import router from "@/router";
 
     
   </div> -->
-</div>
+<!-- </div>
 
-</div>
+</div> -->
 
 
 

@@ -28,7 +28,7 @@ import router from '@/router';
 
                     </li>
                     <li class="nav-item">
-                        <button class="nav-link active" @click="do_export()">Export</button>
+                        <button class="nav-link active" @click="do_export">Export</button>
 
                     </li>
                     <li class="nav-item">
