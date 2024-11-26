@@ -12,9 +12,9 @@ import store from '@/store';
 <RouterView/>
 
 <div class="card" style="width: 56rem ;">
-  <img src="/Users/linisha/Documents/MAD2/frontend/src/assets/Home Page.png" class="card-img-top" alt="Image">
+  <img src="/Users/linisha/Documents/PROJECT_MAD2/MAD2/frontend/src/assets/Home Page.png" class="card-img-top" alt="Image">
  
-   
+  
   <div v-if="userInfo">
   <ul class="list-group list-group-flush">
 

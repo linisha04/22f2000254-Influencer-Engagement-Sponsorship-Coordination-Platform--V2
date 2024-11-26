@@ -9,7 +9,7 @@ import router from "@/router";
     <div v-if="allAdReq.length > 1">
         <div v-for="ad in allAdReq" :key="ad.id">
             <div class="card" style="width: 88rem;">
-                <img src="/Users/linisha/Documents/MAD2/frontend/src/assets/Home Page.png" class="card-img-top"
+                <img src="/Users/linisha/Documents/PROJECT_MAD2/MAD2/frontend/src/assets/Home Page.png" class="card-img-top"
                     alt="..." style="width: 200px; height: auto;">
                 Ad Id : {{ ad.id }} <br>
                 Ad name :{{ ad.name }} <br>
